@@ -6,14 +6,11 @@ export default function Confirmacion() {
   const { folio } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
-
-  // Si el usuario llega directo por URL sin pasar por el carrito, usamos valores por defecto
   const evento = state?.evento || "HUMBE Tour";
   const boletos = state?.boletos ?? 4;
   const total = state?.total ?? 7100.0;
 
   const handleDescargarComprobante = () => {
-    // aquí luego se conecta con la generación real de PDF desde el backend
     console.log("Descargar comprobante del folio", folio);
   };
 

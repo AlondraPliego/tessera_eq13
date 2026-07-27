@@ -26,7 +26,6 @@ export default function RegistroEmpresa() {
       telefono: [requerido],
       contrasena: [requerido, minLength(6)],
       confirmarContrasena: [requerido, confirmaCampo("contrasena", "Las contraseñas no coinciden.")],
-      // sitioWeb no lleva regla porque es opcional
     }
   );
 

@@ -31,7 +31,6 @@ export default function Perfil() {
   };
 
   const handleCancelar = () => {
-    // regresa los campos a sus valores originales (placeholder por ahora)
     setForm({
       nombre: "Alondra",
       apellidos: "Pliego Mendez",

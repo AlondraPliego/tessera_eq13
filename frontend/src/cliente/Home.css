@@ -244,7 +244,7 @@
   }
 
   .home-nav-links {
-    display: none; /* en móvil normalmente esto se mueve a un menú hamburguesa */
+    display: none; 
   }
 
   .home-search {

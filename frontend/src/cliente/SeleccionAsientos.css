@@ -137,7 +137,7 @@
   display: block;
 }
 
-/* Punto fijo que simula un asiento libre — quitar cuando el mapa sea interactivo real */
+/* Simulador */
 .asiento-hotspot {
   position: absolute;
   top: 45%;
@@ -230,7 +230,7 @@
   color: #fff;
 }
 
-/* ---------- Panel de secciones (informativo) ---------- */
+/* ---------- Panel de secciones---------- */
 
 .asientos-secciones-side {
   flex: 1;

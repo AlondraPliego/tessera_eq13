@@ -16,7 +16,7 @@ export default function Home() {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [eventos, setEventos] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [eventoSeleccionado, setEventoSeleccionado] = useState(null); {/* 👈 2. el estado, junto a los demás useState */}
+  const [eventoSeleccionado, setEventoSeleccionado] = useState(null); 
 
   useEffect(() => {
     async function cargarEventos() {

@@ -29,7 +29,6 @@ export default function CrearEditarEvento() {
     }
   );
 
-  // --- Campos del formulario de zona (antes de agregarla a la lista) ---
   const [nuevaZona, setNuevaZona] = useState({
     zona: "",
     precio: "",

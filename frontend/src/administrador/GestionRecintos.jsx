@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getRecintos, crearRecinto, vincularSchemaSeatmap } from "../services/venueService";
 import "./GestionRecintos.css";
 
-const SEATMAP_EDITOR_URL = "https://editor.seatmap.pro"; // URL real del Editor de tu cuenta Seatmap Pro
+const SEATMAP_EDITOR_URL = "https://editor.seatmap.pro/app/venues/2896/schemas/new";
 
 export default function GestionRecintos() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function GestionRecintos() {
   const [cargando, setCargando] = useState(true);
 
   const [nuevoRecinto, setNuevoRecinto] = useState({ nombre: "", direccion: "" });
-  const [vinculando, setVinculando] = useState(null); // id del recinto que se está vinculando
+  const [vinculando, setVinculando] = useState(null); 
   const [schemaForm, setSchemaForm] = useState({ schemaId: "", publicKey: "" });
 
   useEffect(() => {

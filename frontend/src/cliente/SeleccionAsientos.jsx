@@ -15,7 +15,7 @@ export default function SeleccionAsientos() {
   const [datos, setDatos] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-  // --- Popup de "detalles del asiento" (hotspot fijo mientras no hay mapa interactivo real) ---
+
   const [mostrarPopup, setMostrarPopup] = useState(false);
 
   const asientoEjemplo = {
@@ -25,7 +25,6 @@ export default function SeleccionAsientos() {
     precio: 1463.25,
   };
 
-  // --- Lista de asientos ya seleccionados (panel derecho) ---
   const [seleccionados, setSeleccionados] = useState([]);
 
   useEffect(() => {
@@ -108,7 +107,7 @@ export default function SeleccionAsientos() {
           <div className="asientos-mapa">
             <img src={datos.mapaUrl || mapaPlaceholder} alt="Mapa del recinto" />
 
-            {/* Hotspot fijo que simula un asiento libre — reemplazar cuando el mapa sea interactivo real */}
+            {/*Simulacion */}
             <div
               className="asiento-hotspot"
               onMouseEnter={() => setMostrarPopup(true)}

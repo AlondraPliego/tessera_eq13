@@ -12,7 +12,7 @@ export default function Carrito() {
   const [cargoServicio, setCargoServicio] = useState(0);
   const [segundosRestantes, setSegundosRestantes] = useState(0);
   const [cargando, setCargando] = useState(true);
-  const [procesandoPago, setProcesandoPago] = useState(false); // 👈 controla el modal propio
+  const [procesandoPago, setProcesandoPago] = useState(false); 
   const [reservaExpirada, setReservaExpirada] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Carrito() {
     cargarCarrito();
   }, []);
 
-  // --- Temporizador de reserva ---
+  // --- Temporizador ---
   useEffect(() => {
     if (segundosRestantes <= 0) return;
 
@@ -66,8 +66,6 @@ export default function Carrito() {
   const handleContinuarPago = useCallback(() => {
     if (items.length === 0) return;
     setProcesandoPago(true);
-
-    // Simula el tiempo de procesamiento (7 segundos), luego pasa a confirmación real
     setTimeout(async () => {
       try {
         const idsItems = items.map((item) => item.id);
@@ -184,7 +182,7 @@ export default function Carrito() {
         </div>
       </div>
 
-      {/* Modal propio: pago siendo procesado */}
+      
       {procesandoPago && (
         <div className="carrito-modal-overlay">
           <div className="carrito-modal-procesando">
@@ -195,7 +193,6 @@ export default function Carrito() {
         </div>
       )}
 
-      {/* Modal propio: reserva expirada */}
       {reservaExpirada && (
         <div className="carrito-modal-overlay">
           <div className="carrito-modal-expirado">

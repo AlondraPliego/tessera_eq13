@@ -195,7 +195,7 @@
   }
 
   .login-content {
-    flex-direction: column-reverse; /* la imagen queda arriba, form abajo */
+    flex-direction: column-reverse; 
     gap: 24px;
   }
 

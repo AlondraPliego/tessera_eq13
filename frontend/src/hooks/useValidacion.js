@@ -2,8 +2,8 @@ import { useState } from "react";
 
 /**
  *
- * @param {Object} valoresIniciales - ej. { correo: "", contrasena: "" }
- * @param {Object} reglas - ej. { correo: [reglaRequerido, reglaEmail] }
+ * @param {Object} valoresIniciales 
+ * @param {Object} reglas 
  */
 export function useValidacion(valoresIniciales, reglas) {
   const [form, setForm] = useState(valoresIniciales);
@@ -12,8 +12,6 @@ export function useValidacion(valoresIniciales, reglas) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-
-    // si el campo tenía error y el usuario ya está corrigiendo, lo limpiamos
     if (errores[name]) {
       setErrores((prev) => ({ ...prev, [name]: null }));
     }
