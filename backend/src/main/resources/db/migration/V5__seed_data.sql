@@ -1,4 +1,6 @@
 -- V5: Datos de prueba (seed)
+-- Contraseña para TODOS los usuarios de prueba de este archivo: Tessera123!
+-- (ya viene encriptada con BCrypt, así puedes usarla directo para hacer login)
 
 -- Roles
 INSERT INTO rol (id, nombre) VALUES
@@ -7,22 +9,46 @@ INSERT INTO rol (id, nombre) VALUES
 (3, 'CLIENTE');
 
 -- Usuarios (1 admin, 4 empresas, 10 clientes = 15)
-INSERT INTO usuario (id, nombre, apellido_paterno, apellido_materno, email, password, telefono, rol_id, empresa_id) VALUES
-(1, 'Admin', 'Root', 'Sistema', 'admin@tessera.com', '$2a$10$hashPlaceholder1', '5551000001', 1, NULL),
-(2, 'Ticket', 'Vega', 'Ruiz', 'empresa1@tessera.com', '$2a$10$hashPlaceholder2', '5551001000', 2, NULL),
-(3, 'Pro', 'Rivas', 'Mendez', 'empresa2@tessera.com', '$2a$10$hashPlaceholder3', '5551001001', 2, NULL),
-(4, 'Live', 'Cortes', 'Castro', 'empresa3@tessera.com', '$2a$10$hashPlaceholder4', '5551001002', 2, NULL),
-(5, 'Max', 'Fernandez', 'Rojas', 'empresa4@tessera.com', '$2a$10$hashPlaceholder5', '5551001003', 2, NULL),
-(6, 'Ana', 'Garcia', 'Ruiz', 'cliente1@tessera.com', '$2a$10$hashPlaceholder6', '5552001000', 3, NULL),
-(7, 'Luis', 'Hernandez', 'Mendez', 'cliente2@tessera.com', '$2a$10$hashPlaceholder7', '5552001001', 3, NULL),
-(8, 'Marta', 'Lopez', 'Castro', 'cliente3@tessera.com', '$2a$10$hashPlaceholder8', '5552001002', 3, NULL),
-(9, 'Jorge', 'Martinez', 'Rojas', 'cliente4@tessera.com', '$2a$10$hashPlaceholder9', '5552001003', 3, NULL),
-(10, 'Sofia', 'Gonzalez', 'Vega', 'cliente5@tessera.com', '$2a$10$hashPlaceholder10', '5552001004', 3, NULL),
-(11, 'Carlos', 'Perez', 'Nunez', 'cliente6@tessera.com', '$2a$10$hashPlaceholder11', '5552001005', 3, NULL),
-(12, 'Elena', 'Sanchez', 'Soto', 'cliente7@tessera.com', '$2a$10$hashPlaceholder12', '5552001006', 3, NULL),
-(13, 'Diego', 'Ramirez', 'Aguilar', 'cliente8@tessera.com', '$2a$10$hashPlaceholder13', '5552001007', 3, NULL),
-(14, 'Paula', 'Torres', 'Campos', 'cliente9@tessera.com', '$2a$10$hashPlaceholder14', '5552001008', 3, NULL),
-(15, 'Ivan', 'Flores', 'Silva', 'cliente10@tessera.com', '$2a$10$hashPlaceholder15', '5552001009', 3, NULL);
+INSERT INTO usuario (id, nombre, email, password, rol_id) VALUES
+(1, 'Alondra Pliego Mendez', 'admin@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 1),
+(2, 'Vega Ruiz', 'empresa1@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 2),
+(3, 'Rivas Mendez', 'empresa2@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 2),
+(4, 'Cortes Castro', 'empresa3@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 2),
+(5, 'Fernandez Rojas', 'empresa4@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 2),
+(6, 'Ana Garcia Ruiz', 'cliente1@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(7, 'Luis Hernandez Mendez', 'cliente2@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(8, 'Marta Lopez Castro', 'cliente3@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(9, 'Jorge Martinez Rojas', 'cliente4@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(10, 'Sofia Gonzalez Vega', 'cliente5@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(11, 'Carlos Perez Nunez', 'cliente6@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(12, 'Elena Sanchez Soto', 'cliente7@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(13, 'Diego Ramirez Aguilar', 'cliente8@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(14, 'Paula Torres Campos', 'cliente9@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3),
+(15, 'Ivan Flores Silva', 'cliente10@tessera.com', '$2b$10$DfEfLy1eBaCfM9FhX8DUye/fTKPHPinOqWvowou9iI1Ohd19..dYW', 3);
+
+-- Datos extra del administrador
+INSERT INTO administradores (usuario_id, nivel_acceso) VALUES
+(1, 'SUPER_ADMIN');
+
+-- Datos extra de las empresas
+INSERT INTO empresas (usuario_id, nombre_empresa, rfc, telefono, sitio_web) VALUES
+(2, 'Ticket Entertainment', 'TEN900101AAA', '5551001000', 'https://ticket.com'),
+(3, 'Pro Events', 'PEV900101BBB', '5551001001', 'https://proevents.com'),
+(4, 'Live Nation Local', 'LNL900101CCC', '5551001002', 'https://livelocal.com'),
+(5, 'Max Show', 'MSH900101DDD', '5551001003', 'https://maxshow.com');
+
+-- Datos extra de los clientes
+INSERT INTO clientes (usuario_id, nombre_usuario, telefono) VALUES
+(6, 'ana.garcia', '5552001000'),
+(7, 'luis.hernandez', '5552001001'),
+(8, 'marta.lopez', '5552001002'),
+(9, 'jorge.martinez', '5552001003'),
+(10, 'sofia.gonzalez', '5552001004'),
+(11, 'carlos.perez', '5552001005'),
+(12, 'elena.sanchez', '5552001006'),
+(13, 'diego.ramirez', '5552001007'),
+(14, 'paula.torres', '5552001008'),
+(15, 'ivan.flores', '5552001009');
 
 -- Recintos (12)
 INSERT INTO recinto (id, nombre, direccion, mapa_svg, empresa_id) VALUES
@@ -72,74 +98,92 @@ INSERT INTO zona (id, recinto_id, nombre, capacidad, color, coordenadas) VALUES
 (29, 12, 'General', 303, '#FFD433', '[290,435]'),
 (30, 12, 'Preferente', 310, '#FF5733', '[300,450]');
 
--- Eventos (15)
-INSERT INTO evento (id, nombre, descripcion, fecha, recinto_id, empresa_id, estado) VALUES
-(1, 'Festival de Verano', 'Descripcion del evento Festival de Verano', '2026-01-01 19:00:00', 1, 2, 'AGOTADO'),
-(2, 'Concierto Sinfonico', 'Descripcion del evento Concierto Sinfonico', '2026-02-04 19:00:00', 2, 3, 'PROGRAMADO'),
-(3, 'Noche de Rock', 'Descripcion del evento Noche de Rock', '2026-03-07 19:00:00', 3, 4, 'PROGRAMADO'),
-(4, 'Gala de Danza', 'Descripcion del evento Gala de Danza', '2026-04-10 19:00:00', 4, 5, 'PROGRAMADO'),
-(5, 'Torneo de Comedia', 'Descripcion del evento Torneo de Comedia', '2026-05-13 19:00:00', 5, 2, 'PROGRAMADO'),
-(6, 'Feria Cultural', 'Descripcion del evento Feria Cultural', '2026-06-16 19:00:00', 6, 3, 'AGOTADO'),
-(7, 'Recital Acustico', 'Descripcion del evento Recital Acustico', '2026-07-19 19:00:00', 7, 4, 'PROGRAMADO'),
-(8, 'Festival Electronico', 'Descripcion del evento Festival Electronico', '2026-08-22 19:00:00', 8, 5, 'PROGRAMADO'),
-(9, 'Obra de Teatro Clasico', 'Descripcion del evento Obra de Teatro Clasico', '2026-09-25 19:00:00', 9, 2, 'PROGRAMADO'),
-(10, 'Show de Magia', 'Descripcion del evento Show de Magia', '2026-10-01 19:00:00', 10, 3, 'PROGRAMADO'),
-(11, 'Concierto Pop', 'Descripcion del evento Concierto Pop', '2026-11-04 19:00:00', 11, 4, 'AGOTADO'),
-(12, 'Encuentro de Jazz', 'Descripcion del evento Encuentro de Jazz', '2026-12-07 19:00:00', 12, 5, 'PROGRAMADO'),
-(13, 'Batalla de Bandas', 'Descripcion del evento Batalla de Bandas', '2026-01-10 19:00:00', 1, 2, 'PROGRAMADO'),
-(14, 'Musical Infantil', 'Descripcion del evento Musical Infantil', '2026-02-13 19:00:00', 2, 3, 'PROGRAMADO'),
-(15, 'Cierre de Temporada', 'Descripcion del evento Cierre de Temporada', '2026-03-16 19:00:00', 3, 4, 'PROGRAMADO');
+-- Eventos (información general, SIN fecha/recinto: eso vive en fechas_eventos)
+INSERT INTO evento (id, nombre, descripcion, empresa_id, estado) VALUES
+(1, 'Festival de Verano', 'Descripcion del evento Festival de Verano', 2, 'AGOTADO'),
+(2, 'Concierto Sinfonico', 'Descripcion del evento Concierto Sinfonico', 3, 'PROGRAMADO'),
+(3, 'Noche de Rock', 'Descripcion del evento Noche de Rock', 4, 'PROGRAMADO'),
+(4, 'Gala de Danza', 'Descripcion del evento Gala de Danza', 5, 'PROGRAMADO'),
+(5, 'Torneo de Comedia', 'Descripcion del evento Torneo de Comedia', 2, 'PROGRAMADO'),
+(6, 'Feria Cultural', 'Descripcion del evento Feria Cultural', 3, 'AGOTADO'),
+(7, 'Recital Acustico', 'Descripcion del evento Recital Acustico', 4, 'PROGRAMADO'),
+(8, 'Festival Electronico', 'Descripcion del evento Festival Electronico', 5, 'PROGRAMADO'),
+(9, 'Obra de Teatro Clasico', 'Descripcion del evento Obra de Teatro Clasico', 2, 'PROGRAMADO'),
+(10, 'Show de Magia', 'Descripcion del evento Show de Magia', 3, 'PROGRAMADO'),
+(11, 'Concierto Pop', 'Descripcion del evento Concierto Pop', 4, 'AGOTADO'),
+(12, 'Encuentro de Jazz', 'Descripcion del evento Encuentro de Jazz', 5, 'PROGRAMADO'),
+(13, 'Batalla de Bandas', 'Descripcion del evento Batalla de Bandas', 2, 'PROGRAMADO'),
+(14, 'Musical Infantil', 'Descripcion del evento Musical Infantil', 3, 'PROGRAMADO'),
+(15, 'Cierre de Temporada', 'Descripcion del evento Cierre de Temporada', 4, 'PROGRAMADO');
+
+-- Fechas de los eventos (fecha, hora, ciudad y recinto de cada función)
+INSERT INTO fechas_eventos (id, evento_id, fecha, hora, ciudad, recinto_id) VALUES
+(1, 1, '2026-09-01', '19:00:00', 'Ciudad Central', 1),
+(2, 2, '2026-09-04', '19:00:00', 'Ciudad Central', 2),
+(3, 3, '2026-09-07', '19:00:00', 'Ciudad Central', 3),
+(4, 4, '2026-09-10', '19:00:00', 'Ciudad Central', 4),
+(5, 5, '2026-09-13', '19:00:00', 'Ciudad Central', 5),
+(6, 6, '2026-09-16', '19:00:00', 'Ciudad Central', 6),
+(7, 7, '2026-09-19', '19:00:00', 'Ciudad Central', 7),
+(8, 8, '2026-09-22', '19:00:00', 'Ciudad Central', 8),
+(9, 9, '2026-09-25', '19:00:00', 'Ciudad Central', 9),
+(10, 10, '2026-10-01', '19:00:00', 'Ciudad Central', 10),
+(11, 11, '2026-10-04', '19:00:00', 'Ciudad Central', 11),
+(12, 12, '2026-10-07', '19:00:00', 'Ciudad Central', 12),
+(13, 13, '2026-10-10', '19:00:00', 'Ciudad Central', 1),
+(14, 14, '2026-10-13', '19:00:00', 'Ciudad Central', 2),
+(15, 15, '2026-10-16', '19:00:00', 'Ciudad Central', 3);
 
 -- Boletos por evento/zona (30)
 INSERT INTO boleto_evento (id, evento_id, zona_id, precio, cantidad_disponible) VALUES
-(1, 1, 1, 173, 61),
-(2, 1, 2, 196, 72),
-(3, 2, 4, 219, 83),
-(4, 2, 5, 242, 94),
-(5, 3, 6, 265, 105),
-(6, 3, 7, 288, 116),
-(7, 4, 9, 311, 127),
-(8, 4, 10, 334, 138),
-(9, 5, 11, 357, 149),
-(10, 5, 12, 380, 160),
-(11, 6, 14, 403, 171),
-(12, 6, 15, 426, 182),
-(13, 7, 16, 449, 193),
-(14, 7, 17, 472, 204),
-(15, 8, 19, 495, 215),
-(16, 8, 20, 518, 226),
-(17, 9, 21, 541, 237),
-(18, 9, 22, 564, 248),
-(19, 10, 24, 587, 59),
-(20, 10, 25, 610, 70),
-(21, 11, 26, 633, 81),
-(22, 11, 27, 656, 92),
-(23, 12, 29, 679, 103),
-(24, 12, 30, 702, 114),
-(25, 13, 1, 725, 125),
-(26, 13, 2, 748, 136),
-(27, 14, 4, 771, 147),
-(28, 14, 5, 794, 158),
-(29, 15, 6, 817, 169),
-(30, 15, 7, 840, 180);
+(1, 1, 1, 173.00, 61),
+(2, 1, 2, 196.00, 72),
+(3, 2, 4, 219.00, 83),
+(4, 2, 5, 242.00, 94),
+(5, 3, 6, 265.00, 105),
+(6, 3, 7, 288.00, 116),
+(7, 4, 9, 311.00, 127),
+(8, 4, 10, 334.00, 138),
+(9, 5, 11, 357.00, 149),
+(10, 5, 12, 380.00, 160),
+(11, 6, 14, 403.00, 171),
+(12, 6, 15, 426.00, 182),
+(13, 7, 16, 449.00, 193),
+(14, 7, 17, 472.00, 204),
+(15, 8, 19, 495.00, 215),
+(16, 8, 20, 518.00, 226),
+(17, 9, 21, 541.00, 237),
+(18, 9, 22, 564.00, 248),
+(19, 10, 24, 587.00, 59),
+(20, 10, 25, 610.00, 70),
+(21, 11, 26, 633.00, 81),
+(22, 11, 27, 656.00, 92),
+(23, 12, 29, 679.00, 103),
+(24, 12, 30, 702.00, 114),
+(25, 13, 1, 725.00, 125),
+(26, 13, 2, 748.00, 136),
+(27, 14, 4, 771.00, 147),
+(28, 14, 5, 794.00, 158),
+(29, 15, 6, 817.00, 169),
+(30, 15, 7, 840.00, 180);
 
 -- Compras (15)
 INSERT INTO compra (id, cliente_id, fecha, total, estado) VALUES
-(1, 6, '2026-01-01 10:00:00', 1279.0, 'PENDIENTE'),
-(2, 7, '2026-02-03 11:07:00', 933.0, 'PAGADA'),
-(3, 8, '2026-03-05 12:14:00', 1923.0, 'PAGADA'),
-(4, 9, '2026-04-07 13:21:00', 449.0, 'PAGADA'),
-(5, 10, '2026-05-09 14:28:00', 2659.0, 'PENDIENTE'),
-(6, 11, '2026-06-11 15:35:00', 1761.0, 'PAGADA'),
-(7, 12, '2026-07-13 16:42:00', 3303.0, 'PAGADA'),
-(8, 13, '2026-08-15 17:49:00', 725.0, 'PAGADA'),
-(9, 14, '2026-09-17 18:56:00', 4039.0, 'PENDIENTE'),
-(10, 15, '2026-01-19 10:03:00', 519.0, 'PAGADA'),
-(11, 6, '2026-02-21 11:10:00', 1233.0, 'PAGADA'),
-(12, 7, '2026-03-23 12:17:00', 311.0, 'PAGADA'),
-(13, 8, '2026-04-25 13:24:00', 1969.0, 'PENDIENTE'),
-(14, 9, '2026-05-27 14:31:00', 1347.0, 'PAGADA'),
-(15, 10, '2026-06-02 15:38:00', 2613.0, 'PAGADA');
+(1, 6, '2026-07-01 10:00:00', 1279.00, 'PENDIENTE'),
+(2, 7, '2026-07-03 11:07:00', 933.00, 'PAGADA'),
+(3, 8, '2026-07-05 12:14:00', 1923.00, 'PAGADA'),
+(4, 9, '2026-07-07 13:21:00', 449.00, 'PAGADA'),
+(5, 10, '2026-07-09 14:28:00', 2659.00, 'PENDIENTE'),
+(6, 11, '2026-07-11 15:35:00', 1761.00, 'PAGADA'),
+(7, 12, '2026-07-13 16:42:00', 3303.00, 'PAGADA'),
+(8, 13, '2026-07-15 17:49:00', 725.00, 'PAGADA'),
+(9, 14, '2026-07-17 18:56:00', 4039.00, 'PENDIENTE'),
+(10, 15, '2026-07-19 10:03:00', 519.00, 'PAGADA'),
+(11, 6, '2026-07-21 11:10:00', 1233.00, 'PAGADA'),
+(12, 7, '2026-07-23 12:17:00', 311.00, 'PAGADA'),
+(13, 8, '2026-07-25 13:24:00', 1969.00, 'PENDIENTE'),
+(14, 9, '2026-07-26 14:31:00', 1347.00, 'PAGADA'),
+(15, 10, '2026-07-27 15:38:00', 2613.00, 'PAGADA');
 
 -- Detalle de compra (23) -- relacion N:M compra <-> boleto_evento
 INSERT INTO detalle_compra (id, compra_id, boleto_evento_id, cantidad, subtotal) VALUES

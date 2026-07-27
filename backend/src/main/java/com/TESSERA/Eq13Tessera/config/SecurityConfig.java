@@ -1,5 +1,6 @@
 package com.TESSERA.Eq13Tessera.config;
 
+import org.springframework.http.HttpMethod;
 import com.TESSERA.Eq13Tessera.config.JwtAuthFilter;
 import com.TESSERA.Eq13Tessera.auth.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,30 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()   
+                .requestMatchers("/api/auth/**").permitAll()
+                // Cualquiera (sin login) puede VER recintos y zonas
+                .requestMatchers(HttpMethod.GET, "/api/recintos/mios").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/recintos/**").permitAll()
+                // Solo una EMPRESA puede crear/editar/borrar recintos y zonas
+                .requestMatchers(HttpMethod.POST, "/api/recintos/**").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.PUT, "/api/recintos/**").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.DELETE, "/api/recintos/**").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.PUT, "/api/zonas/**").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.DELETE, "/api/zonas/**").hasRole("EMPRESA")
+                // Eventos: ver es público, crear/editar/borrar solo EMPRESA
+                .requestMatchers(HttpMethod.GET, "/api/eventos/mios").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/eventos/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/eventos/**").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.PATCH, "/api/eventos/**").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.DELETE, "/api/eventos/**").hasRole("EMPRESA")
+                // Compras: solo CLIENTE compra y cancela; solo ADMIN ve el listado completo
+                .requestMatchers(HttpMethod.GET, "/api/compras/mias").hasRole("CLIENTE")
+                .requestMatchers(HttpMethod.GET, "/api/compras/{id}").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/compras").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/compras").hasRole("CLIENTE")
+                .requestMatchers(HttpMethod.PATCH, "/api/compras/*/cancelar").hasRole("CLIENTE")
+                // Endpoints de prueba de notificaciones: solo ADMIN
+                .requestMatchers("/api/notificaciones/**").hasRole("ADMIN")
                 .anyRequest().authenticated()                   // todo lo demás requiere token
             )
             .sessionManagement(session -> session
