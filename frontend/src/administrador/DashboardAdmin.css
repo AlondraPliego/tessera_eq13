@@ -1,0 +1,240 @@
+.admin-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 24px 32px;
+}
+
+.admin-loading {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 40px 0;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.admin-logo {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--color-navy);
+  cursor: pointer;
+}
+
+.admin-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-recintos-btn {
+  background: #fff;
+  border: 1px solid #ddd8c9;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--color-navy);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-recintos-btn:hover {
+  background: var(--color-container);
+}
+
+.admin-dropdown-wrapper {
+  position: relative;
+}
+
+.admin-usuario-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-usuario-btn:hover {
+  background: var(--color-navy-hover);
+}
+
+.admin-header {
+  margin-bottom: 20px;
+}
+
+.admin-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--color-navy);
+}
+
+.admin-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.admin-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-metric-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-metric-label {
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.admin-metric-value {
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+.admin-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.admin-panel-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-navy);
+  margin-bottom: 14px;
+}
+
+.admin-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-list-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-navy);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-list-info {
+  flex: 1;
+}
+
+.admin-list-info p {
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.admin-list-fecha {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.admin-estado-pill {
+  background: var(--color-container);
+  border: none;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-estado-pill:hover:not(:disabled) {
+  background: var(--color-navy);
+  color: #fff;
+}
+
+.admin-estado-pill:disabled {
+  cursor: default;
+}
+
+.admin-estado-pill.aceptado {
+  background: var(--color-navy);
+  color: #fff;
+}
+
+.admin-estado-pill.estado-info {
+  cursor: default;
+}
+
+.admin-estado-pill.activo {
+  background: var(--color-container);
+  color: var(--color-text);
+}
+
+.admin-estado-pill.desconectado {
+  background: #e5e3e3;
+  color: var(--color-text-muted);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1024px) {
+  .admin-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 16px;
+  }
+
+  .admin-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,252 @@
+.recintos-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 24px 32px;
+}
+
+.recintos-loading {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 40px 0;
+}
+
+.recintos-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.recintos-logo {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--color-navy);
+  cursor: pointer;
+}
+
+.recintos-volver-btn {
+  background: #fff;
+  border: 1px solid #ddd8c9;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--color-navy);
+  cursor: pointer;
+}
+
+.recintos-header {
+  margin-bottom: 20px;
+}
+
+.recintos-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--color-navy);
+}
+
+.recintos-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+  max-width: 500px;
+}
+
+.recintos-nuevo-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  max-width: 700px;
+}
+
+.recintos-card-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-navy);
+  margin-bottom: 12px;
+}
+
+.recintos-nuevo-form {
+  display: flex;
+  gap: 10px;
+}
+
+.recintos-nuevo-form input {
+  flex: 1;
+  border: 1px solid #ddd8c9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: var(--font-body);
+}
+
+.recintos-crear-btn {
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.recintos-crear-btn:hover {
+  background: var(--color-navy-hover);
+}
+
+.recintos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 700px;
+}
+
+.recinto-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.recinto-info {
+  flex: 1;
+  min-width: 180px;
+}
+
+.recinto-nombre {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.recinto-direccion {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.recinto-schema-id {
+  font-size: 11px;
+  color: #1d6fc7;
+  margin-top: 4px;
+}
+
+.recinto-estado {
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+}
+
+.recinto-estado.publicado {
+  background: #eaf3de;
+  color: #3b6d11;
+}
+
+.recinto-estado.sin-mapa {
+  background: #faeeda;
+  color: #854f0b;
+}
+
+.recinto-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.recinto-btn-editor {
+  background: var(--color-container);
+  color: var(--color-text);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.recinto-btn-vincular {
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.recinto-btn-vincular:hover {
+  background: var(--color-navy-hover);
+}
+
+.recinto-vincular-form {
+  width: 100%;
+  background: var(--color-bg);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recinto-vincular-help {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.recinto-vincular-form input {
+  border: 1px solid #ddd8c9;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: var(--font-body);
+}
+
+.recinto-vincular-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.recinto-btn-cancelar {
+  background: transparent;
+  border: 1px solid #ddd8c9;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.recinto-btn-guardar {
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .recintos-page {
+    padding: 16px;
+  }
+
+  .recintos-nuevo-form {
+    flex-direction: column;
+  }
+}

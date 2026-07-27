@@ -1,0 +1,138 @@
+.registro-empresa-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 40px 60px;
+}
+
+.registro-empresa-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.registro-empresa-logo-img {
+  width: 24px;
+  height: 24px;
+}
+
+.registro-empresa-logo span {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--color-navy);
+}
+
+.registro-empresa-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 34px;
+  color: black;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.registro-empresa-content {
+  display: flex;
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.registro-empresa-info-side {
+  flex: 0 0 240px;
+}
+
+.registro-empresa-welcome-card {
+  background: var(--color-container);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.registro-empresa-welcome-card p {
+  font-size: 13px;
+  color: black;
+  line-height: 1.7;
+}
+
+.registro-empresa-hero-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.registro-empresa-card {
+  flex: 1;
+  background: var(--color-container);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.registro-empresa-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.registro-empresa-submit {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.registro-empresa-login-text {
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.registro-empresa-login-text a {
+  color: var(--color-navy);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1024px) {
+  .registro-empresa-content {
+    gap: 20px;
+  }
+
+  .registro-empresa-info-side {
+    flex: 0 0 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .registro-empresa-page {
+    padding: 24px 20px;
+  }
+
+  .registro-empresa-title {
+    font-size: 24px;
+  }
+
+  .registro-empresa-content {
+    flex-direction: column;
+  }
+
+  .registro-empresa-info-side {
+    flex: 1;
+    width: 100%;
+  }
+
+  .registro-empresa-grid {
+    grid-template-columns: 1fr; /* en móvil, un input por fila */
+  }
+
+  .registro-empresa-login-text {
+    text-align: center;
+  }
+}

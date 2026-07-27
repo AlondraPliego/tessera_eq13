@@ -1,0 +1,76 @@
+.dropdown-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.dropdown-card {
+  position: absolute;
+  top: 60px;
+  right: 32px;
+  width: 280px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(37, 53, 81, 0.2);
+  padding: 16px;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee9d9;
+  margin-bottom: 12px;
+}
+
+.dropdown-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-navy);
+  font-size: 18px;
+}
+
+.dropdown-empresa {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.dropdown-verificado {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.dropdown-fiscal-label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.dropdown-fiscal-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text);
+  padding: 3px 0;
+}
+
+.dropdown-logout {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-top: 1px solid #eee9d9;
+  margin-top: 12px;
+  padding-top: 12px;
+  color: #a32d2d;
+  font-size: 13px;
+  font-family: var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}

@@ -1,0 +1,250 @@
+.misboletos-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: 24px 32px;
+}
+
+.misboletos-loading,
+.misboletos-vacio {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 20px 0;
+}
+
+.misboletos-topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.misboletos-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--color-navy);
+}
+
+.misboletos-logo-img {
+  width: 22px;
+  height: 22px;
+}
+
+.misboletos-search {
+  flex: 1;
+  max-width: 260px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #ddd8c9;
+  border-radius: 20px;
+  padding: 6px 14px;
+}
+
+.misboletos-search input {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  flex: 1;
+  font-family: var(--font-body);
+  background: transparent;
+}
+
+.misboletos-search i {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.misboletos-usuario-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-navy);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.misboletos-usuario-btn:hover {
+  background: var(--color-navy-hover);
+}
+
+.misboletos-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--color-navy);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ---------- Carrusel de boletos activos ---------- */
+
+.misboletos-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.misboletos-carousel-content {
+  width: 260px;
+}
+
+.misboletos-poster {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  display: block;
+}
+
+.misboletos-detalle-card {
+  background: var(--color-navy);
+  border-radius: 0 0 12px 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.misboletos-detalle-info {
+  flex: 1;
+}
+
+.misboletos-detalle-nombre {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dot {
+  color: #7f9bd1;
+  font-size: 9px;
+}
+
+.misboletos-detalle-sub {
+  color: #cfd0e6;
+  font-size: 11px;
+  margin: 4px 0 6px;
+}
+
+.misboletos-ver-qr {
+  color: #9fc6ec;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.misboletos-qr-icon {
+  font-size: 34px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.carousel-arrow {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--color-navy);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-arrow:disabled {
+  color: #c2c0b8;
+  cursor: not-allowed;
+}
+
+.carousel-arrow.small {
+  font-size: 16px;
+  width: 24px;
+}
+
+/* ---------- Historial de eventos ---------- */
+
+.misboletos-historial-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--color-navy);
+  margin-bottom: 12px;
+}
+
+.misboletos-historial-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.misboletos-historial-list {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.historial-card {
+  background: var(--color-navy);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.historial-nombre {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.historial-sub {
+  color: #cfd0e6;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.historial-check {
+  color: #7fd99a;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+  .misboletos-page {
+    padding: 16px;
+  }
+
+  .misboletos-topbar {
+    flex-wrap: wrap;
+  }
+
+  .misboletos-search {
+    order: 3;
+    max-width: 100%;
+  }
+
+  .misboletos-historial-list {
+    grid-template-columns: 1fr;
+  }
+}
