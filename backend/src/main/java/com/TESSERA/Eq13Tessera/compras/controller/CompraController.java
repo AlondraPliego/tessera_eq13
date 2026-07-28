@@ -22,7 +22,7 @@ public class CompraController {
         this.compraService = compraService;
     }
 
-    // Solo un cliente puede comprar boletos (ver SecurityConfig)
+    // Solo un CLIENTE puede comprar boletos (ver SecurityConfig)
     @PostMapping
     public ResponseEntity<CompraResponse> crear(
             @Valid @RequestBody CompraRequest dto, Authentication authentication) {
@@ -36,7 +36,7 @@ public class CompraController {
         return ResponseEntity.ok(compraService.listarPorCliente(obtenerUsuarioId(authentication), pageable));
     }
 
-    // GET /api/compras -> Todas las compras, solo para el administrador
+    // GET /api/compras -> TODAS las compras, solo para el administrador
     @GetMapping
     public ResponseEntity<Page<CompraResponse>> listarTodas(Pageable pageable) {
         return ResponseEntity.ok(compraService.listarTodas(pageable));
@@ -63,5 +63,3 @@ public class CompraController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 }
-
-//Aun falta conectar con seatmap

@@ -8,7 +8,8 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
-
+// Se usa TANTO para pedir la compra (boletoEventoId + cantidad)
+// COMO para responder qué se compró (aquí ya viene con el subtotal calculado)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

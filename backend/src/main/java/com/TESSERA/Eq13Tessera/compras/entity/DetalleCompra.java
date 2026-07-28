@@ -3,6 +3,7 @@ package com.TESSERA.Eq13Tessera.compras.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
+// Tabla asociativa compra <-> boleto_evento (con cantidad y subtotal propios)
 @Entity
 @Table(name = "detalle_compra")
 public class DetalleCompra {

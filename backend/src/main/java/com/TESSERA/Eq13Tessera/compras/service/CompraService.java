@@ -58,6 +58,7 @@ public class CompraService {
     }
 
     // --- CREAR COMPRA ---
+    // Nota para el equipo: aquí NO conectamos una pasarela de pago real todavía.
     // Simulamos que el pago se aprueba al instante y dejamos la compra en "PAGADA".
     @Transactional
     public CompraResponse crear(CompraRequest dto, Long clienteId) {
@@ -76,12 +77,15 @@ public class CompraService {
             }
         }
 
-        // 2) Creamos la compra
+        // 2) Creamos la compra (todavía sin total, lo llenamos abajo)
         Compra compra = new Compra();
         compra.setClienteId(clienteId);
         compra.setTotal(BigDecimal.ZERO);
         compra.setEstado("PAGADA");
         compra = compraRepository.save(compra);
+
+        // 3) Por cada boleto: calculamos el subtotal, descontamos el inventario
+        //    y guardamos el detalle de la compra
         for (DetalleCompraDTO d : dto.getDetalles()) {
             BoletoEvento boleto = boletoEventoRepository.findById(d.getBoletoEventoId()).orElseThrow();
 
@@ -107,7 +111,8 @@ public class CompraService {
         return toResponse(compra);
     }
 
-    // Avisa al cliente que su compra se realizó 
+    // Avisa al cliente que su compra se realizó (correo siempre; SMS/WhatsApp
+    // solo si el cliente dejó su teléfono al registrarse)
     private void notificarCompra(Compra compra) {
         Usuario usuario = usuarioRepository.findById(compra.getClienteId()).orElse(null);
         if (usuario == null) return;
@@ -123,7 +128,7 @@ public class CompraService {
         }
     }
 
-    // --- LISTAR MIS COMPRAS 
+    // --- LISTAR MIS COMPRAS (cliente autenticado) ---
     public Page<CompraResponse> listarPorCliente(Long clienteId, Pageable pageable) {
         return compraRepository.findByClienteId(clienteId, pageable).map(this::toResponse);
     }
@@ -164,6 +169,7 @@ public class CompraService {
         return toResponse(compraRepository.save(compra));
     }
 
+    // --- helpers ---
 
     private Compra buscarOFallar(Long id) {
         return compraRepository.findById(id)
