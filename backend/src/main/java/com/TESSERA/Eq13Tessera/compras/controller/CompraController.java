@@ -63,3 +63,5 @@ public class CompraController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 }
+
+//Aun falta conectar con seatmap
