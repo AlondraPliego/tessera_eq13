@@ -1,5 +1,6 @@
 package com.TESSERA.Eq13Tessera.common.exception;
 
+import com.TESSERA.Eq13Tessera.auth.exception.DatosRegistroInvalidosException;
 import com.TESSERA.Eq13Tessera.auth.exception.RolNoEncontradoException;
 import com.TESSERA.Eq13Tessera.auth.exception.TokenInvalidoException;
 import com.TESSERA.Eq13Tessera.auth.exception.UsuarioYaExisteException;
@@ -24,6 +25,11 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(DatosRegistroInvalidosException.class)
+    public ResponseEntity<ApiErrorResponse> handleDatosRegistroInvalidos(DatosRegistroInvalidosException ex) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(RolNoEncontradoException.class)
     public ResponseEntity<ApiErrorResponse> handleRolNoEncontrado(RolNoEncontradoException ex) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -32,6 +38,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenInvalidoException.class)
     public ResponseEntity<ApiErrorResponse> handleTokenInvalido(TokenInvalidoException ex) {
         return build(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(StockInsuficienteException.class)
+    public ResponseEntity<ApiErrorResponse> handleStockInsuficiente(StockInsuficienteException ex) {
+        return build(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(OperacionNoPermitidaException.class)
+    public ResponseEntity<ApiErrorResponse> handleOperacionNoPermitida(OperacionNoPermitidaException ex) {
+        return build(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+        return build(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)

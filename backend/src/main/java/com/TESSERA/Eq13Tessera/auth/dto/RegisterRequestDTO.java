@@ -24,4 +24,13 @@ public class RegisterRequestDTO {
 
     @NotBlank(message = "El rol es obligatorio")
     private String rolNombre; // "EMPRESA" o "CLIENTE"
+
+    // --- Campos que solo se usan si rolNombre = "CLIENTE" ---
+    private String nombreUsuario;
+
+    // --- Campos que solo se usan si rolNombre = "EMPRESA" ---
+    private String nombreEmpresa;
+    private String rfc;
+    private String telefono;
+    private String sitioWeb;
 }
