@@ -55,6 +55,17 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(ArchivoInvalidoException.class)
+    public ResponseEntity<ApiErrorResponse> handleArchivoInvalido(ArchivoInvalidoException ex) {
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiErrorResponse> handleArchivoDemasiadoGrande(
+            org.springframework.web.multipart.MaxUploadSizeExceededException ex) {
+        return build(HttpStatus.BAD_REQUEST, "El archivo supera el tamaño máximo permitido (5 MB)");
+    }
+
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleUsuarioNoEncontrado(UsernameNotFoundException ex) {
         return build(HttpStatus.NOT_FOUND, ex.getMessage());

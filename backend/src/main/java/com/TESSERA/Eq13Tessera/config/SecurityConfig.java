@@ -62,6 +62,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/notificaciones/**").hasRole("ADMIN")
                 // Config pública de seatmap.pro (no es secreta, la usa el frontend)
                 .requestMatchers("/api/seatmap/**").permitAll()
+                // Subir flyers: solo EMPRESA. Ver la imagen ya subida: cualquiera (público, como cualquier foto en internet).
+                .requestMatchers(HttpMethod.POST, "/api/uploads/flyers").hasRole("EMPRESA")
+                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                 .anyRequest().authenticated()                   // todo lo demás requiere token
             )
             .sessionManagement(session -> session
