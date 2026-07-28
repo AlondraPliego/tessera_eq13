@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import estadioImg from "../assets/img/estadio.png";
 import { useValidacion } from "../hooks/useValidacion";
-import { requerido, esEmail, minLength, confirmaCampo } from "../hooks/validadores";
+import { requerido, esEmail, contrasenaSegura, confirmaCampo } from "../hooks/validadores";
 import FormField from "../components/FormField";
+import api from "../services/api";
 import "./RegistroCliente.css";
 
 export default function RegistroCliente() {
@@ -19,17 +21,38 @@ export default function RegistroCliente() {
       nombreCompleto: [requerido],
       nombreUsuario: [requerido],
       correo: [requerido, esEmail],
-      contrasena: [requerido, minLength(6)],
+      contrasena: [requerido, contrasenaSegura],
       confirmarContrasena: [requerido, confirmaCampo("contrasena", "Las contraseñas no coinciden.")],
     }
   );
 
-  const handleSubmit = (e) => {
+  const [errorApi, setErrorApi] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validar()) return;
 
-    // aquí luego conectamos con api.js
-    console.log("Registro cliente:", form);
+    setErrorApi("");
+    setEnviando(true);
+    try {
+      await api.post("/api/auth/register", {
+        nombre: form.nombreCompleto,
+        email: form.correo,
+        password: form.contrasena,
+        rolNombre: "CLIENTE",
+      });
+      navigate("/login");
+    } catch (err) {
+      setErrorApi(
+        err.response?.data?.message ||
+          err.response?.data ||
+          "No se pudo completar el registro."
+      );
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -105,8 +128,10 @@ export default function RegistroCliente() {
               error={errores.confirmarContrasena}
             />
 
-            <button type="submit" className="btn-navy">
-              Registrarme
+            {errorApi && <p className="input-error">{errorApi}</p>}
+
+            <button type="submit" className="btn-navy" disabled={enviando}>
+              {enviando ? "Registrando..." : "Registrarme"}
             </button>
 
             <p className="registro-login-text">

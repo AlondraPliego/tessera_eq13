@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import heroImg from "../assets/img/recinto.png";
 import { useValidacion } from "../hooks/useValidacion";
 import { requerido, esEmail } from "../hooks/validadores";
 import FormField from "../components/FormField";
+import api from "../services/api";
+import { useAuth } from "../AuthContext";
 import "./Login.css";
 
 export default function Login() {
@@ -15,16 +18,36 @@ export default function Login() {
     }
   );
 
+  const [errorApi, setErrorApi] = useState("");
+  const [enviando, setEnviando] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = (rol) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!validar()) return;
 
-    // aquí luego conectamos con api.js para el login real con JWT
-    console.log("Login como", rol, form);
+    setErrorApi("");
+    setEnviando(true);
+    try {
+      const { data } = await api.post("/api/auth/login", {
+        email: form.email,
+        password: form.password,
+      });
 
-    if (rol === "empresa") navigate("/empresa/dashboard");
-    else navigate("/");
+      login({ email: data.email, rol: data.rol }, data.token);
+
+      if (data.rol === "EMPRESA") navigate("/empresa/dashboard");
+      else navigate("/");
+    } catch (err) {
+      setErrorApi(
+        err.response?.data?.message ||
+          err.response?.data ||
+          "Correo o contraseña incorrectos."
+      );
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -38,7 +61,7 @@ export default function Login() {
         <div className="login-form-side">
           <h1 className="login-title">Iniciar Sesión</h1>
 
-          <div className="login-card">
+          <form onSubmit={handleSubmit} noValidate className="login-card">
             <FormField
               icon="ti-at"
               type="email"
@@ -63,12 +86,11 @@ export default function Login() {
               Recordarme
             </label>
 
+            {errorApi && <p className="input-error">{errorApi}</p>}
+
             <div className="login-buttons">
-              <button className="btn-navy" onClick={() => handleLogin("cliente")}>
-                Cliente
-              </button>
-              <button className="btn-navy" onClick={() => handleLogin("empresa")}>
-                Empresa
+              <button type="submit" className="btn-navy" disabled={enviando}>
+                {enviando ? "Ingresando..." : "Iniciar sesión"}
               </button>
             </div>
 
@@ -87,7 +109,7 @@ export default function Login() {
               <i className="ti ti-brand-facebook"></i>
               <i className="ti ti-brand-apple"></i>
             </div>
-          </div>
+          </form>
         </div>
 
         <div className="login-image-side">

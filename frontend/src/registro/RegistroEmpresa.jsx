@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import recintoImg from "../assets/img/recinto-empresa.jpg";
 import { useValidacion } from "../hooks/useValidacion";
-import { requerido, esEmail, minLength, confirmaCampo } from "../hooks/validadores";
+import { requerido, esEmail, contrasenaSegura, confirmaCampo } from "../hooks/validadores";
 import FormField from "../components/FormField";
+import api from "../services/api";
 import "./RegistroEmpresa.css";
 
 export default function RegistroEmpresa() {
@@ -24,17 +26,41 @@ export default function RegistroEmpresa() {
       rfc: [requerido],
       correoCorporativo: [requerido, esEmail],
       telefono: [requerido],
-      contrasena: [requerido, minLength(6)],
+      contrasena: [requerido, contrasenaSegura],
       confirmarContrasena: [requerido, confirmaCampo("contrasena", "Las contraseñas no coinciden.")],
     }
   );
 
-  const handleSubmit = (e) => {
+  const [errorApi, setErrorApi] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validar()) return;
 
-    // aquí luego conectamos con api.js
-    console.log("Registro empresa:", form);
+    setErrorApi("");
+    setEnviando(true);
+    try {
+      // ⚠️ El backend hoy solo guarda nombre, email, password y rolNombre.
+      // rfc, telefono, sitioWeb y nombreEmpresa NO se guardan todavía:
+      // hace falta ampliar RegisterRequestDTO y el modelo en el backend.
+      await api.post("/api/auth/register", {
+        nombre: form.nombreResponsable,
+        email: form.correoCorporativo,
+        password: form.contrasena,
+        rolNombre: "EMPRESA",
+      });
+      navigate("/login");
+    } catch (err) {
+      setErrorApi(
+        err.response?.data?.message ||
+          err.response?.data ||
+          "No se pudo completar el registro."
+      );
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -138,8 +164,10 @@ export default function RegistroEmpresa() {
             />
           </div>
 
-          <button type="submit" className="btn-navy registro-empresa-submit">
-            Registrarme
+          {errorApi && <p className="input-error">{errorApi}</p>}
+
+          <button type="submit" className="btn-navy registro-empresa-submit" disabled={enviando}>
+            {enviando ? "Registrando..." : "Registrarme"}
           </button>
 
           <p className="registro-empresa-login-text">
