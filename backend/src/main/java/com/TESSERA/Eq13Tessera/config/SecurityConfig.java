@@ -3,6 +3,9 @@ package com.TESSERA.Eq13Tessera.config;
 import org.springframework.http.HttpMethod;
 import com.TESSERA.Eq13Tessera.config.JwtAuthFilter;
 import com.TESSERA.Eq13Tessera.auth.service.UsuarioService;
+
+import org.springframework.security.config.Customizer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()

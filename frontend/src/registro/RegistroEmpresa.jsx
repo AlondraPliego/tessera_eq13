@@ -47,9 +47,13 @@ export default function RegistroEmpresa() {
       // hace falta ampliar RegisterRequestDTO y el modelo en el backend.
       await api.post("/api/auth/register", {
         nombre: form.nombreResponsable,
+        nombreEmpresa: form.nombreEmpresa,
         email: form.correoCorporativo,
         password: form.contrasena,
         rolNombre: "EMPRESA",
+        rfc: form.rfc,
+        telefono: form.telefono,
+        sitioWeb: form.sitioWeb,
       });
       navigate("/login");
     } catch (err) {

@@ -39,6 +39,7 @@ export default function RegistroCliente() {
     try {
       await api.post("/api/auth/register", {
         nombre: form.nombreCompleto,
+        nombreUsuario: form.nombreUsuario,
         email: form.correo,
         password: form.contrasena,
         rolNombre: "CLIENTE",
@@ -99,6 +100,15 @@ export default function RegistroCliente() {
               value={form.nombreUsuario}
               onChange={handleChange}
               error={errores.nombreUsuario}
+            />
+            <FormField
+              icon="ti-user"
+              type="text"
+              name="telefonoUsuario"
+              placeholder="Teléfono"
+              value={form.telefonoUsuario}
+              onChange={handleChange}
+              error={errores.telefonoUsuario}
             />
             <FormField
               icon="ti-at"
