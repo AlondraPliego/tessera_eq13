@@ -1,9 +1,5 @@
 package com.TESSERA.Eq13Tessera.config;
 
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.List;
 import org.springframework.http.HttpMethod;
 import com.TESSERA.Eq13Tessera.config.JwtAuthFilter;
 import com.TESSERA.Eq13Tessera.auth.service.UsuarioService;
@@ -34,7 +30,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> {}) 
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
@@ -61,6 +56,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/api/compras/*/cancelar").hasRole("CLIENTE")
                 // Endpoints de prueba de notificaciones: solo ADMIN
                 .requestMatchers("/api/notificaciones/**").hasRole("ADMIN")
+                // Config pública de seatmap.pro (no es secreta, la usa el frontend)
+                .requestMatchers("/api/seatmap/**").permitAll()
                 .anyRequest().authenticated()                   // todo lo demás requiere token
             )
             .sessionManagement(session -> session
@@ -82,19 +79,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-
-    //conectar con backend
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
     }
 }

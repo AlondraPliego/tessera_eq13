@@ -34,3 +34,9 @@ twilio.account-sid=TU_ACCOUNT_SID
 twilio.auth-token=TU_AUTH_TOKEN
 twilio.sms-from=TU_NUMERO_TWILIO
 twilio.whatsapp-from=whatsapp:+14155238886
+
+# --- Seatmap.pro ---
+seatmap.base-url=https://booking.seatmap.pro
+seatmap.organization-token=TU_ORGANIZATION_TOKEN
+seatmap.organization-id=TU_ORGANIZATION_ID
+seatmap.public-key=TU_PUBLIC_KEY

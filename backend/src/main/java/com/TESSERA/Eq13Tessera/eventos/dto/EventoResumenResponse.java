@@ -3,19 +3,14 @@ package com.TESSERA.Eq13Tessera.eventos.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
+// Versión "ligera" del evento, para listas/paginación (sin cargar fechas ni boletos)
 @Data
 @AllArgsConstructor
-public class EventoResponse {
+public class EventoResumenResponse {
     private Long id;
     private String nombre;
     private String descripcion;
     private Long empresaId;
     private String estado;
     private String flyerPrincipal;
-    private String flyerSecundario;
-    private String flyerTerciario;
-    private List<FechaEventoResponse> fechas;
-    private List<BoletoEventoResponse> boletos;
 }

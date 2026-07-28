@@ -1,7 +1,6 @@
 package com.TESSERA.Eq13Tessera.eventos.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "evento")
@@ -18,11 +17,8 @@ public class Evento {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "fecha", nullable = false)
-    private LocalDateTime fecha;
-
-    @Column(name = "recinto_id", nullable = false)
-    private Long recintoId;
+    // La fecha, hora, ciudad y recinto de cada función viven en la tabla
+    // "fechas_eventos" (un evento puede tener varias funciones/fechas).
 
     @Column(name = "empresa_id", nullable = false)
     private Long empresaId;
@@ -48,12 +44,6 @@ public class Evento {
 
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-
-    public LocalDateTime getFecha() { return fecha; }
-    public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }
-
-    public Long getRecintoId() { return recintoId; }
-    public void setRecintoId(Long recintoId) { this.recintoId = recintoId; }
 
     public Long getEmpresaId() { return empresaId; }
     public void setEmpresaId(Long empresaId) { this.empresaId = empresaId; }
