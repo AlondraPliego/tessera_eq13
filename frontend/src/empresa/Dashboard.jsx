@@ -76,7 +76,7 @@ export default function Dashboard() {
         <>
           <div className="dashboard-metrics">
             <div className="metric-card">
-              <span className="metric-label">Ganancias totales</span>
+              <span className="metric-label">Ingreso potencial</span>
               <span className="metric-value">
                 ${metricas.gananciasTotales.toLocaleString("es-MX")}
               </span>
@@ -84,7 +84,7 @@ export default function Dashboard() {
             <div className="metric-card">
               <span className="metric-label">Boletos vendidos</span>
               <span className="metric-value">
-                {metricas.boletosVendidos.toLocaleString("es-MX")}
+                {metricas.boletosVendidos != null ? metricas.boletosVendidos.toLocaleString("es-MX") : "—"}
               </span>
             </div>
             <div className="metric-card">
@@ -93,7 +93,7 @@ export default function Dashboard() {
             </div>
             <div className="metric-card">
               <span className="metric-label">Ocupación</span>
-              <span className="metric-value">{metricas.ocupacion}%</span>
+              <span className="metric-value">{metricas.ocupacion != null ? `${metricas.ocupacion}%` : "—"}</span>
             </div>
           </div>
 
@@ -103,8 +103,8 @@ export default function Dashboard() {
                 <tr>
                   <th>Evento</th>
                   <th>Fecha</th>
-                  <th>Boletos vendidos</th>
-                  <th>Ganancia</th>
+                  <th>Boletos disponibles</th>
+                  <th>Ingreso potencial</th>
                   <th>Estado</th>
                 </tr>
               </thead>
@@ -117,10 +117,8 @@ export default function Dashboard() {
                   >
                     <td>{evento.nombre}</td>
                     <td>{evento.fecha}</td>
-                    <td>
-                      {evento.boletosVendidos}/{evento.boletosTotales}
-                    </td>
-                    <td>${evento.ganancia.toLocaleString("es-MX")}</td>
+                    <td>{evento.boletosTotales != null ? evento.boletosTotales : "—"}</td>
+                    <td>{evento.ganancia != null ? `$${evento.ganancia.toLocaleString("es-MX")}` : "—"}</td>
                     <td>{evento.estado}</td>
                   </tr>
                 ))}

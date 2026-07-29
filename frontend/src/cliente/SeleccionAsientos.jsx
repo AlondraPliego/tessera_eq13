@@ -5,6 +5,7 @@ import eventoPlaceholder from "../assets/img/modalejemplo.png";
 import mapaPlaceholder from "../assets/img/mapaejemplo.png";
 import { getEventoParaAsientos } from "../services/venueService";
 import { crearReserva, liberarReserva } from "../services/cartService";
+import { resolverUrlImagen } from "../services/api";
 import "./SeleccionAsientos.css";
 
 
@@ -48,7 +49,7 @@ export default function SeleccionAsientos() {
     setError(null);
     setReservando(seccion.id);
     try {
-      const reserva = await crearReserva(seccion.id, 1);
+      const reserva = await crearReserva({ boletoEventoId: seccion.id, cantidad: 1 });
       setSeleccionados((prev) => [
         ...prev,
         {
@@ -113,10 +114,10 @@ export default function SeleccionAsientos() {
 
       <div className="asientos-evento-info">
         <img
-          src={datos.imagenUrl || eventoPlaceholder}
-          alt={datos.nombreEvento}
-          className="asientos-evento-img"
-        />
+  src={datos.imagenUrl ? resolverUrlImagen(datos.imagenUrl) : eventoPlaceholder}
+  alt={datos.nombreEvento}
+  className="asientos-evento-img"
+/>
         <div>
           <h1 className="asientos-evento-nombre">{datos.nombreEvento}</h1>
           <p className="asientos-evento-fecha">

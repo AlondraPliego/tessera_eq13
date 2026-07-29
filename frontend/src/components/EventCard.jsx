@@ -1,9 +1,11 @@
+import { resolverUrlImagen } from "../services/api";
+
 export default function EventCard({ evento }) {
   return (
     <div className="event-card">
       <div className="event-card-image">
         {evento.imagenUrl ? (
-          <img src={evento.imagenUrl} alt={evento.nombreEvento} />
+          <img src={resolverUrlImagen(evento.imagenUrl)} alt={evento.nombreEvento} />
         ) : (
           <span className="event-card-placeholder">{evento.nombreEvento}</span>
         )}

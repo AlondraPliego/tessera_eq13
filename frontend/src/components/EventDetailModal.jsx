@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import placeholderImg from "../assets/img/modalejemplo.png";
 import { getDetalleEvento } from "../services/eventService";
 import "./EventDetailModal.css";
+import { resolverUrlImagen } from "../services/api";
 
 export default function EventDetailModal({ eventoId, onClose }) {
   const [detalle, setDetalle] = useState(null);
@@ -42,9 +43,9 @@ export default function EventDetailModal({ eventoId, onClose }) {
           <div className="modal-body">
             <div className="modal-image">
               <img
-                src={detalle.imagenUrl || placeholderImg}
-                alt={detalle.nombreEvento}
-              />
+  src={detalle.imagenUrl ? resolverUrlImagen(detalle.imagenUrl) : placeholderImg}
+  alt={detalle.nombreEvento}
+/>
             </div>
 
             <div className="modal-info">

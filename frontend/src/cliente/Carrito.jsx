@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import ticketThumb from "../assets/img/modalejemplo.png";
 import { procesarPago, liberarReserva } from "../services/cartService";
+import { resolverUrlImagen } from "../services/api";
 import "./Carrito.css";
 
 const CARGO_SERVICIO = 100.0;
@@ -114,10 +115,10 @@ export default function Carrito() {
               {items.map((item) => (
                 <div key={item.reservaId} className="carrito-item">
                   <img
-                    src={datosEvento.imagenUrl || ticketThumb}
-                    alt={datosEvento.nombreEvento}
-                    className="carrito-item-img"
-                  />
+                  src={datosEvento.imagenUrl ? resolverUrlImagen(datosEvento.imagenUrl) : ticketThumb}
+                  alt={datosEvento.nombreEvento}
+                  className="carrito-item-img"
+                />
                   <div className="carrito-item-info">
                     <p className="carrito-item-nombre">
                       {datosEvento.nombreEvento}{" "}

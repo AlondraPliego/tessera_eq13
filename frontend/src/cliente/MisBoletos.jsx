@@ -89,7 +89,7 @@ export default function MisBoletos() {
                   {boletoActual.evento} <span className="dot">●</span> {boletoActual.tipo}
                 </p>
                 <p className="misboletos-detalle-sub">
-                  Sección {boletoActual.seccion} - Asiento {boletoActual.asiento} -{" "}
+                  Sección {boletoActual.seccion} - {boletoActual.asiento} -{" "}
                   {boletoActual.fecha}
                 </p>
                 <a href="#" className="misboletos-ver-qr">

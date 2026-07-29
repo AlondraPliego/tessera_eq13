@@ -21,7 +21,7 @@ function formatearFecha(fechaISO, horaISO) {
 export async function getEventosRecomendados({ categoria, pagina, limite = 6 }) {
   const response = await api.get("/api/eventos", {
     params: {
-      estado: "PUBLICADO", 
+      estado: "PROGRAMADO", 
       page: pagina - 1,   
       size: limite,
     },
