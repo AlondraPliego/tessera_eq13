@@ -8,8 +8,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
-// Se usa TANTO para pedir la compra (boletoEventoId + cantidad)
-// COMO para responder qué se compró (aquí ya viene con el subtotal calculado)
+// Se usa TANTO para pedir la compra COMO para responder qué se compró
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +21,8 @@ public class DetalleCompraDTO {
     @Min(value = 1, message = "Debes comprar al menos 1 boleto")
     private Integer cantidad;
 
-    // Este campo se llena solo en la respuesta, no hace falta mandarlo al comprar
+
+    private Long reservaId;
+
     private BigDecimal subtotal;
 }

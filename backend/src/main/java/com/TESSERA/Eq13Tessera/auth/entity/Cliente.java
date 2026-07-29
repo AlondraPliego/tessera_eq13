@@ -30,11 +30,6 @@ public class Cliente {
     @Column(name = "telefono")
     private String telefono;
 
-    public Cliente(Usuario usuario, String nombreUsuario) {
-        this.usuario = usuario;
-        this.nombreUsuario = nombreUsuario;
-    }
-
     public Cliente(Usuario usuario, String nombreUsuario, String telefono) {
         this.usuario = usuario;
         this.nombreUsuario = nombreUsuario;
