@@ -23,8 +23,6 @@ public class ReservaService {
     private final ReservaRepository reservaRepository;
     private final BoletoEventoRepository boletoEventoRepository;
 
-    // Minutos que dura una reserva antes de liberarse sola.
-    // Configurable en application.properties como reserva.minutos-expiracion=5
     @Value("${reserva.minutos-expiracion:5}")
     private int minutosExpiracion;
 
@@ -34,7 +32,7 @@ public class ReservaService {
         this.boletoEventoRepository = boletoEventoRepository;
     }
 
-    // --- CREAR RESERVA: aparta el inventario YA, antes de que el cliente pague ---
+    // crea la reserva
     @Transactional
     public ReservaResponse crear(ReservaRequest dto, Long clienteId) {
         BoletoEvento boleto = boletoEventoRepository.findById(dto.getBoletoEventoId())
@@ -60,7 +58,7 @@ public class ReservaService {
         return toResponse(reserva, boleto.getPrecio());
     }
 
-    // --- LIBERAR RESERVA A MANO (el cliente quita el asiento del carrito, o cancela) ---
+    // libera la reserva cuando el cliente lo quita del carrito
     @Transactional
     public void liberar(Long reservaId, Long clienteId) {
         Reserva reserva = reservaRepository.findById(reservaId)
@@ -74,10 +72,7 @@ public class ReservaService {
         reservaRepository.delete(reserva);
     }
 
-    // --- USADO POR CompraService: valida y "consume" la reserva al confirmar el pago ---
-    // No vuelve a tocar el inventario (ya se descontó al reservar), solo valida
-    // que la reserva exista, sea del cliente correcto, no haya expirado, y que
-    // coincida con lo que se está comprando. La borra al final (ya se convirtió en compra).
+    // borra la reserva cuando el cliente la convierte en compra
     @Transactional
     public Reserva consumir(Long reservaId, Long clienteId, Long boletoEventoIdEsperado, Integer cantidadEsperada) {
         Reserva reserva = reservaRepository.findById(reservaId)
@@ -87,7 +82,7 @@ public class ReservaService {
             throw new OperacionNoPermitidaException("Esta reserva no te pertenece");
         }
         if (reserva.getExpiraEn().isBefore(LocalDateTime.now())) {
-            reservaRepository.delete(reserva); // ya expiró, el scheduler no ha pasado todavía: la limpiamos aquí
+            reservaRepository.delete(reserva);
             throw new OperacionNoPermitidaException(
                     "Tu reserva expiró. Vuelve a seleccionar el asiento e intenta de nuevo.");
         }
@@ -100,7 +95,7 @@ public class ReservaService {
         return reserva;
     }
 
-    // --- SCHEDULER: corre cada minuto, libera reservas vencidas que nadie pagó ---
+    // libera reservas vencidas
     @Scheduled(fixedRate = 60_000)
     @Transactional
     public void liberarReservasVencidas() {

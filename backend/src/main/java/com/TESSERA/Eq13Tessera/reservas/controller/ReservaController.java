@@ -20,7 +20,6 @@ public class ReservaController {
         this.reservaService = reservaService;
     }
 
-    // Solo un CLIENTE puede reservar boletos (ver SecurityConfig)
     @PostMapping
     public ResponseEntity<ReservaResponse> crear(
             @Valid @RequestBody ReservaRequest dto, Authentication authentication) {
@@ -28,7 +27,7 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
 
-    // El cliente quita el asiento de su selección antes de pagar: libera el inventario ya
+    // el cliente quita el asiento del carrito, o cancela la reserva
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> liberar(@PathVariable Long id, Authentication authentication) {
         reservaService.liberar(id, obtenerUsuarioId(authentication));

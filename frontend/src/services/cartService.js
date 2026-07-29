@@ -1,28 +1,20 @@
 import api from "./api";
 
-// Trae los boletos que el usuario tiene en el carrito
-export async function getCarrito() {
-  // const response = await api.get("/api/carrito");
-  // return response.data;
 
-  // --- Placeholder mientras conectamos el backend real ---
+// Crea y paga la compra de una vez.
+// detalles: [{ boletoEventoId, cantidad }]
+export async function procesarPago(detalles) {
+  const response = await api.post("/api/compras", { detalles });
+  const compra = response.data; // CompraResponse: { id, clienteId, fecha, total, estado, detalles }
+
   return {
-    tiempoExpiraSegundos: 5 * 60, // 5 minutos de reserva
-    cargoServicio: 100.0,
-    items: [
-      { id: 1, evento: "HUMBE", tipo: "Tour", seccion: "GCE-015", asiento: "F20", fecha: "13 ago, 21:00", precio: 5500.0, imagenUrl: null },
-      { id: 2, evento: "HUMBE", tipo: "Tour", seccion: "GCE-015", asiento: "F20", fecha: "13 ago, 21:00", precio: 5500.0, imagenUrl: null },
-      { id: 3, evento: "HUMBE", tipo: "Tour", seccion: "GCE-015", asiento: "F20", fecha: "13 ago, 21:00", precio: 5500.0, imagenUrl: null },
-      { id: 4, evento: "HUMBE", tipo: "Tour", seccion: "GCE-015", asiento: "F20", fecha: "13 ago, 21:00", precio: 5500.0, imagenUrl: null },
-    ],
+    folio: compra.id,
+    total: compra.total,
   };
 }
 
-// Confirma el pago y regresa el folio de compra
-export async function procesarPago(itemsIds) {
-  // const response = await api.post("/api/carrito/pagar", { items: itemsIds });
-  // return response.data; // { folio, total }
-
-  // --- Placeholder mientras conectamos el backend real ---
-  return { folio: "SRTH-456" };
+// Cancela una compra ya realizada (regresa el inventario)
+export async function cancelarCompra(compraId) {
+  const response = await api.patch(`/api/compras/${compraId}/cancelar`);
+  return response.data;
 }

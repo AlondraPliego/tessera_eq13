@@ -61,18 +61,12 @@ public class CompraService {
         this.reservaService = reservaService;
     }
 
-    // --- CREAR COMPRA ---
-    // Nota para el equipo: aquí NO conectamos una pasarela de pago real todavía.
-    // Simulamos que el pago se aprueba al instante y dejamos la compra en "PAGADA".
+
     @Transactional
     public CompraResponse crear(CompraRequest dto, Long clienteId) {
         BigDecimal total = BigDecimal.ZERO;
 
-        // 1) Validamos ANTES de tocar la base de datos:
-        //    - Si trae reservaId: que la reserva exista, sea del cliente, no haya
-        //      expirado y coincida con lo que se está comprando (no vuelve a tocar stock,
-        //      ya se descontó cuando se creó la reserva).
-        //    - Si NO trae reservaId: comportamiento anterior, valida stock directo.
+        // Validamos que haya suficiente inventario para cada boleto
         for (DetalleCompraDTO d : dto.getDetalles()) {
             if (d.getReservaId() != null) {
                 reservaService.consumir(d.getReservaId(), clienteId, d.getBoletoEventoId(), d.getCantidad());
@@ -89,16 +83,14 @@ public class CompraService {
             }
         }
 
-        // 2) Creamos la compra (todavía sin total, lo llenamos abajo)
+        // Creamos la compra (todavía sin total, eso es despues)
         Compra compra = new Compra();
         compra.setClienteId(clienteId);
         compra.setTotal(BigDecimal.ZERO);
         compra.setEstado("PAGADA");
         compra = compraRepository.save(compra);
 
-        // 3) Por cada boleto: calculamos el subtotal y guardamos el detalle.
-        //    Solo descontamos inventario aquí si NO venía de una reserva
-        //    (si venía de reserva, el inventario ya se descontó al reservar).
+        // calculamos el subtotal y guardamos el detalle.
         for (DetalleCompraDTO d : dto.getDetalles()) {
             BoletoEvento boleto = boletoEventoRepository.findById(d.getBoletoEventoId()).orElseThrow();
 
@@ -126,8 +118,6 @@ public class CompraService {
         return toResponse(compra);
     }
 
-    // Avisa al cliente que su compra se realizó (correo siempre; SMS/WhatsApp
-    // solo si el cliente dejó su teléfono al registrarse)
     private void notificarCompra(Compra compra) {
         Usuario usuario = usuarioRepository.findById(compra.getClienteId()).orElse(null);
         if (usuario == null) return;
@@ -143,17 +133,14 @@ public class CompraService {
         }
     }
 
-    // --- LISTAR MIS COMPRAS (cliente autenticado) ---
     public Page<CompraResponse> listarPorCliente(Long clienteId, Pageable pageable) {
         return compraRepository.findByClienteId(clienteId, pageable).map(this::toResponse);
     }
 
-    // --- LISTAR TODAS (solo administrador) ---
     public Page<CompraResponse> listarTodas(Pageable pageable) {
         return compraRepository.findAll(pageable).map(this::toResponse);
     }
 
-    // --- VER DETALLE DE UNA COMPRA ---
     public CompraResponse obtenerPorId(Long id, Long clienteId, boolean esAdmin) {
         Compra compra = buscarOFallar(id);
         if (!esAdmin && !compra.getClienteId().equals(clienteId)) {
@@ -162,7 +149,6 @@ public class CompraService {
         return toResponse(compra);
     }
 
-    // --- CANCELAR COMPRA (regresa el inventario) ---
     @Transactional
     public CompraResponse cancelar(Long id, Long clienteId) {
         Compra compra = buscarOFallar(id);
@@ -184,7 +170,6 @@ public class CompraService {
         return toResponse(compraRepository.save(compra));
     }
 
-    // --- helpers ---
 
     private Compra buscarOFallar(Long id) {
         return compraRepository.findById(id)
