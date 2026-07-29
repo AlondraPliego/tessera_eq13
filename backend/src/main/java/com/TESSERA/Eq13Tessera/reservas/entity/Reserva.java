@@ -3,9 +3,7 @@ package com.TESSERA.Eq13Tessera.reservas.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-// Un apartado temporal de N boletos de UN boleto_evento, mientras el
-// cliente decide si compra. Si expira_en pasa sin que se vuelva compra,
-// el scheduler de ReservaService la libera y regresa el inventario.
+//aparta el boleto al momento de reservar, pero si el tiempo expira regresa a estar dispinible
 @Entity
 @Table(name = "reserva")
 public class Reserva {

@@ -1,54 +1,42 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import ticketThumb from "../assets/img/modalejemplo.png";
-import { getCarrito, procesarPago } from "../services/cartService";
+import { procesarPago, liberarReserva } from "../services/cartService";
 import "./Carrito.css";
+
+const CARGO_SERVICIO = 100.0;
 
 export default function Carrito() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [items, setItems] = useState([]);
-  const [cargoServicio, setCargoServicio] = useState(0);
+  const datosEvento = location.state || null;
+  const [items, setItems] = useState(datosEvento?.items || []);
   const [segundosRestantes, setSegundosRestantes] = useState(0);
-  const [cargando, setCargando] = useState(true);
-  const [procesandoPago, setProcesandoPago] = useState(false); 
+  const [procesandoPago, setProcesandoPago] = useState(false);
   const [reservaExpirada, setReservaExpirada] = useState(false);
+  const [errorPago, setErrorPago] = useState(null);
+
+  const expiraEnMasProximo = useMemo(() => {
+    if (items.length === 0) return null;
+    return items.reduce((min, item) => {
+      const t = new Date(item.expiraEn).getTime();
+      return min === null || t < min ? t : min;
+    }, null);
+  }, [items]);
 
   useEffect(() => {
-    async function cargarCarrito() {
-      setCargando(true);
-      try {
-        const data = await getCarrito();
-        setItems(data.items);
-        setCargoServicio(data.cargoServicio);
-        setSegundosRestantes(data.tiempoExpiraSegundos);
-      } catch (error) {
-        console.error("Error al cargar el carrito:", error);
-      } finally {
-        setCargando(false);
-      }
-    }
-    cargarCarrito();
-  }, []);
-
-  // --- Temporizador ---
-  useEffect(() => {
-    if (segundosRestantes <= 0) return;
-
-    const intervalo = setInterval(() => {
-      setSegundosRestantes((prev) => {
-        if (prev <= 1) {
-          clearInterval(intervalo);
-          setReservaExpirada(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
+    if (!expiraEnMasProximo) return;
+    const actualizar = () => {
+      const restantes = Math.max(0, Math.floor((expiraEnMasProximo - Date.now()) / 1000));
+      setSegundosRestantes(restantes);
+      if (restantes === 0) setReservaExpirada(true);
+    };
+    actualizar();
+    const intervalo = setInterval(actualizar, 1000);
     return () => clearInterval(intervalo);
-  }, [segundosRestantes === 0]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [expiraEnMasProximo]);
 
   const formatearTiempo = (segundos) => {
     const min = Math.floor(segundos / 60);
@@ -56,45 +44,63 @@ export default function Carrito() {
     return `${String(min).padStart(2, "0")}:${String(seg).padStart(2, "0")}`;
   };
 
-  const handleEliminar = (id) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  const handleEliminar = (reservaId) => {
+    setItems((prev) => prev.filter((item) => item.reservaId !== reservaId));
+    liberarReserva(reservaId).catch((err) =>
+      console.error("Error al liberar la reserva:", err)
+    );
   };
 
-  const subtotal = items.reduce((acc, item) => acc + item.precio, 0);
-  const total = subtotal + (items.length > 0 ? cargoServicio : 0);
+  const subtotal = items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+  const total = subtotal + (items.length > 0 ? CARGO_SERVICIO : 0);
 
   const handleContinuarPago = useCallback(() => {
     if (items.length === 0) return;
+    setErrorPago(null);
     setProcesandoPago(true);
-    setTimeout(async () => {
-      try {
-        const idsItems = items.map((item) => item.id);
-        const { folio } = await procesarPago(idsItems);
-        navigate(`/confirmacion/${folio}`, {
-          state: { evento: items[0]?.evento, boletos: items.length, total },
-        });
-      } catch (error) {
-        console.error("Error al procesar el pago:", error);
-        setProcesandoPago(false);
-      }
-    }, 7000);
-  }, [items, total, navigate]);
 
-  if (cargando) {
-    return <p className="carrito-loading">Cargando carrito...</p>;
+    procesarPago(items)
+      .then(({ folio, total: totalPagado }) => {
+        navigate(`/confirmacion/${folio}`, {
+          state: {
+            evento: datosEvento?.nombreEvento,
+            boletos: items.length,
+            total: totalPagado,
+          },
+        });
+      })
+      .catch((err) => {
+        console.error("Error al procesar el pago:", err);
+        setErrorPago(
+          err.response?.data?.mensaje ||
+            "No se pudo completar el pago. Puede que tu reserva haya expirado."
+        );
+        setProcesandoPago(false);
+      });
+  }, [items, datosEvento, navigate]);
+
+  if (!datosEvento) {
+    return (
+      <div className="carrito-page">
+        <p className="carrito-vacio">
+          Tu carrito está vacío.{" "}
+          <Link to="/">Vuelve al inicio para elegir un evento.</Link>
+        </p>
+      </div>
+    );
   }
 
   return (
     <div className="carrito-page">
       <div className="carrito-topbar">
         <Link to="/" className="home-logo">
-  <img src={logo} alt="Tessera" className="home-logo-img" />
-  Tessera
-</Link>
+          <img src={logo} alt="Tessera" className="home-logo-img" />
+          Tessera
+        </Link>
         <Link to="/perfil" className="home-login-btn">
-  <i className="ti ti-user"></i>
-  Usuario
-</Link>
+          <i className="ti ti-user"></i>
+          Usuario
+        </Link>
       </div>
 
       <div className="carrito-content">
@@ -106,30 +112,31 @@ export default function Carrito() {
           ) : (
             <div className="carrito-items-list">
               {items.map((item) => (
-                <div key={item.id} className="carrito-item">
+                <div key={item.reservaId} className="carrito-item">
                   <img
-                    src={item.imagenUrl || ticketThumb}
-                    alt={item.evento}
+                    src={datosEvento.imagenUrl || ticketThumb}
+                    alt={datosEvento.nombreEvento}
                     className="carrito-item-img"
                   />
                   <div className="carrito-item-info">
                     <p className="carrito-item-nombre">
-                      {item.evento} <span className="carrito-item-dot">●</span> {item.tipo}
+                      {datosEvento.nombreEvento}{" "}
+                      <span className="carrito-item-dot">●</span> {item.nombre}
                     </p>
                     <p className="carrito-item-detalle">
-                      Sección {item.seccion} - Asiento {item.asiento} - {item.fecha}
+                      {item.cantidad} boleto(s) · {datosEvento.fecha} {datosEvento.hora}
                     </p>
                   </div>
                   <div className="carrito-item-right">
                     <span className="carrito-item-precio">
                       $
-                      {item.precio.toLocaleString("es-MX", {
+                      {(item.precio * item.cantidad).toLocaleString("es-MX", {
                         minimumFractionDigits: 2,
                       })}
                     </span>
                     <button
                       className="carrito-item-eliminar"
-                      onClick={() => handleEliminar(item.id)}
+                      onClick={() => handleEliminar(item.reservaId)}
                       aria-label="Eliminar boleto"
                     >
                       <i className="ti ti-trash"></i>
@@ -160,7 +167,7 @@ export default function Carrito() {
               <span>Cargo por servicio</span>
               <span>
                 $
-                {(items.length > 0 ? cargoServicio : 0).toLocaleString("es-MX", {
+                {(items.length > 0 ? CARGO_SERVICIO : 0).toLocaleString("es-MX", {
                   minimumFractionDigits: 2,
                 })}
               </span>
@@ -172,9 +179,11 @@ export default function Carrito() {
             <span>${total.toLocaleString("es-MX", { minimumFractionDigits: 2 })}</span>
           </div>
 
+          {errorPago && <p className="asientos-error">{errorPago}</p>}
+
           <button
             className="carrito-pagar-btn"
-            disabled={items.length === 0}
+            disabled={items.length === 0 || reservaExpirada}
             onClick={handleContinuarPago}
           >
             Continuar al pago
@@ -182,7 +191,6 @@ export default function Carrito() {
         </div>
       </div>
 
-      
       {procesandoPago && (
         <div className="carrito-modal-overlay">
           <div className="carrito-modal-procesando">

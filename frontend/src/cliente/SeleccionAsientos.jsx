@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useSearchParams, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import eventoPlaceholder from "../assets/img/modalejemplo.png";
 import mapaPlaceholder from "../assets/img/mapaejemplo.png";
 import { getEventoParaAsientos } from "../services/venueService";
+import { crearReserva, liberarReserva } from "../services/cartService";
 import "./SeleccionAsientos.css";
+
 
 export default function SeleccionAsientos() {
   const { eventoId } = useParams();
@@ -14,17 +16,8 @@ export default function SeleccionAsientos() {
 
   const [datos, setDatos] = useState(null);
   const [cargando, setCargando] = useState(true);
-
-
-  const [mostrarPopup, setMostrarPopup] = useState(false);
-
-  const asientoEjemplo = {
-    seccion: "GCE-015",
-    fila: "F",
-    asiento: "20",
-    precio: 1463.25,
-  };
-
+  const [reservando, setReservando] = useState(null);
+  const [error, setError] = useState(null);
   const [seleccionados, setSeleccionados] = useState([]);
 
   useEffect(() => {
@@ -33,8 +26,9 @@ export default function SeleccionAsientos() {
       try {
         const data = await getEventoParaAsientos(eventoId, fechaId);
         setDatos(data);
-      } catch (error) {
-        console.error("Error al cargar la selección de asientos:", error);
+      } catch (err) {
+        console.error("Error al cargar la selección de asientos:", err);
+        setError("No se pudo cargar el evento. Intenta de nuevo.");
       } finally {
         setCargando(false);
       }
@@ -42,20 +36,62 @@ export default function SeleccionAsientos() {
     cargarDatos();
   }, [eventoId, fechaId]);
 
-  const handleSeleccionarAsiento = () => {
-    const nuevoAsiento = {
-      id: Date.now(),
-      etiqueta: `${asientoEjemplo.seccion.split("-")[0]}-13,15,16,17`,
-      precio: 5500.0, 
+  useEffect(() => {
+    return () => {
+      seleccionados.forEach((item) => {
+        liberarReserva(item.reservaId).catch(() => {});
+      });
     };
+  }, []);
 
-    setSeleccionados((prev) => [...prev, nuevoAsiento]);
-    setMostrarPopup(false);
+  const handleSeleccionarSeccion = async (seccion) => {
+    setError(null);
+    setReservando(seccion.id);
+    try {
+      const reserva = await crearReserva(seccion.id, 1);
+      setSeleccionados((prev) => [
+        ...prev,
+        {
+          reservaId: reserva.id,
+          boletoEventoId: seccion.id,
+          nombre: seccion.nombre,
+          cantidad: reserva.cantidad,
+          precio: reserva.precioUnitario,
+          expiraEn: reserva.expiraEn,
+        },
+      ]);
+    } catch (err) {
+      console.error("No se pudo reservar la sección:", err);
+      setError(
+        err.response?.data?.mensaje ||
+          "Ya no hay boletos disponibles en esa sección. Elige otra."
+      );
+    } finally {
+      setReservando(null);
+    }
+  };
+
+  const handleQuitarSeleccion = async (reservaId) => {
+    setSeleccionados((prev) => prev.filter((item) => item.reservaId !== reservaId));
+    try {
+      await liberarReserva(reservaId);
+    } catch (err) {
+      console.error("Error al liberar la reserva:", err);
+    }
   };
 
   const handleComprar = () => {
     if (seleccionados.length === 0) return;
-    navigate(`/carrito?evento=${eventoId}&asientos=${seleccionados.length}`);
+    navigate("/carrito", {
+      state: {
+        eventoId,
+        nombreEvento: datos.nombreEvento,
+        imagenUrl: datos.imagenUrl,
+        fecha: datos.fecha,
+        hora: datos.hora,
+        items: seleccionados,
+      },
+    });
   };
 
   if (cargando || !datos) {
@@ -66,13 +102,13 @@ export default function SeleccionAsientos() {
     <div className="asientos-page">
       <div className="asientos-topbar">
         <Link to="/" className="home-logo">
-  <img src={logo} alt="Tessera" className="home-logo-img" />
-  Tessera
-</Link>
+          <img src={logo} alt="Tessera" className="home-logo-img" />
+          Tessera
+        </Link>
         <Link to="/perfil" className="home-login-btn">
-  <i className="ti ti-user"></i>
-  Usuario
-</Link>
+          <i className="ti ti-user"></i>
+          Usuario
+        </Link>
       </div>
 
       <div className="asientos-evento-info">
@@ -90,6 +126,8 @@ export default function SeleccionAsientos() {
         </div>
       </div>
 
+      {error && <p className="asientos-error">{error}</p>}
+
       <div className="asientos-content">
         <div className="asientos-mapa-side">
           <div className="asientos-leyenda">
@@ -106,63 +144,7 @@ export default function SeleccionAsientos() {
 
           <div className="asientos-mapa">
             <img src={datos.mapaUrl || mapaPlaceholder} alt="Mapa del recinto" />
-
-            {/*Simulacion */}
-            <div
-              className="asiento-hotspot"
-              onMouseEnter={() => setMostrarPopup(true)}
-              onMouseLeave={() => setMostrarPopup(false)}
-            >
-              {mostrarPopup && (
-                <div
-                  className="asiento-popup"
-                  onMouseEnter={() => setMostrarPopup(true)}
-                  onMouseLeave={() => setMostrarPopup(false)}
-                >
-                  <p className="asiento-popup-title">Detalles del asiento</p>
-                  <div className="asiento-popup-card">
-                    <div className="asiento-popup-info">
-                      <div>
-                        <span className="asiento-popup-label">Sección</span>
-                        <span className="asiento-popup-value">
-                          {asientoEjemplo.seccion}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="asiento-popup-label">Fila</span>
-                        <span className="asiento-popup-value">{asientoEjemplo.fila}</span>
-                      </div>
-                      <div>
-                        <span className="asiento-popup-label">Asiento</span>
-                        <span className="asiento-popup-value">
-                          {asientoEjemplo.asiento}
-                        </span>
-                      </div>
-                    </div>
-                    <p className="asiento-popup-precio">
-                      Precio: $
-                      {asientoEjemplo.precio.toLocaleString("es-MX", {
-                        minimumFractionDigits: 2,
-                      })}
-                    </p>
-                    <div className="asiento-popup-buttons">
-                      <button
-                        className="asiento-popup-btn cerrar"
-                        onClick={() => setMostrarPopup(false)}
-                      >
-                        Cerrar
-                      </button>
-                      <button
-                        className="asiento-popup-btn seleccionar"
-                        onClick={handleSeleccionarAsiento}
-                      >
-                        Seleccionar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            {/* aqui falta el seatmap */}
           </div>
         </div>
 
@@ -174,15 +156,24 @@ export default function SeleccionAsientos() {
               <div key={seccion.id} className="seccion-card">
                 <p className="seccion-nombre">{seccion.nombre}</p>
                 <p className="seccion-tipo">
-                  <span className="seccion-dot"></span> {seccion.tipo}
+                  <span className="seccion-dot"></span> {seccion.tipo} ·{" "}
+                  {seccion.disponibles} disponibles
                 </p>
                 <p className="seccion-precio">
-                  $
-                  {seccion.precio.toLocaleString("es-MX", {
-                    minimumFractionDigits: 2,
-                  })}{" "}
+                  ${seccion.precio.toLocaleString("es-MX", { minimumFractionDigits: 2 })}{" "}
                   cada uno
                 </p>
+                <button
+                  className="btn-navy"
+                  disabled={seccion.disponibles === 0 || reservando === seccion.id}
+                  onClick={() => handleSeleccionarSeccion(seccion)}
+                >
+                  {reservando === seccion.id
+                    ? "Reservando..."
+                    : seccion.disponibles === 0
+                    ? "Agotado"
+                    : "Seleccionar"}
+                </button>
               </div>
             ))}
           </div>
@@ -192,18 +183,20 @@ export default function SeleccionAsientos() {
               <h3 className="asientos-seleccionados-title">Asientos Seleccionados</h3>
 
               <div className="asientos-seleccionados-list">
-                {seleccionados.map((asiento) => (
-                  <div key={asiento.id} className="asiento-seleccionado-row">
+                {seleccionados.map((item) => (
+                  <div key={item.reservaId} className="asiento-seleccionado-row">
                     <span className="seccion-dot"></span>
-                    <span className="asiento-seleccionado-etiqueta">
-                      {asiento.etiqueta}
-                    </span>
+                    <span className="asiento-seleccionado-etiqueta">{item.nombre}</span>
                     <span className="asiento-seleccionado-precio">
-                      $
-                      {asiento.precio.toLocaleString("es-MX", {
-                        minimumFractionDigits: 2,
-                      })}
+                      ${item.precio.toLocaleString("es-MX", { minimumFractionDigits: 2 })}
                     </span>
+                    <button
+                      className="asiento-seleccionado-quitar"
+                      onClick={() => handleQuitarSeleccion(item.reservaId)}
+                      aria-label="Quitar"
+                    >
+                      <i className="ti ti-x"></i>
+                    </button>
                   </div>
                 ))}
               </div>

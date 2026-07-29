@@ -12,6 +12,6 @@ public class ReservaResponse {
     private Long id;
     private Long boletoEventoId;
     private Integer cantidad;
-    private BigDecimal precioUnitario; // precio del boleto AL MOMENTO de reservar
+    private BigDecimal precioUnitario;
     private LocalDateTime expiraEn;
 }
