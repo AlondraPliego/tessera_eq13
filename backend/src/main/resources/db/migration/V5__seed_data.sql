@@ -1,6 +1,6 @@
 -- V5: Datos de prueba (seed)
--- Contraseña para TODOS los usuarios de prueba de este archivo: Tessera123!
--- (ya viene encriptada con BCrypt, así puedes usarla directo para hacer login)
+-- Contraseña: Tessera123!
+
 
 -- Roles
 INSERT INTO rol (id, nombre) VALUES
