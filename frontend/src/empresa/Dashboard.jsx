@@ -42,8 +42,14 @@ export default function Dashboard() {
         <div className="dashboard-nav-right">
           <span className="dashboard-nav-link">Mis eventos</span>
           <button
+            className="dashboard-recintos-btn"
+            onClick={() => navigate("/empresa/recintos")}
+          >
+            Mis recintos
+          </button>
+          <button
             className="dashboard-crear-btn"
-            onClick={() => navigate("/organizador/eventos/nuevo")}
+            onClick={() => navigate("/empresa/evento/nuevo")}
           >
             + Crear evento
           </button>
@@ -113,7 +119,7 @@ export default function Dashboard() {
                   <tr
                     key={evento.id}
                     className="dashboard-row-clickable"
-                    onClick={() => navigate(`/organizador/eventos/${evento.id}/editar`)}
+                    onClick={() => navigate(`/empresa/evento/${evento.id}/editar`)}
                   >
                     <td>{evento.nombre}</td>
                     <td>{evento.fecha}</td>

@@ -35,6 +35,7 @@ export async function getRecintos({ pagina = 1, limite = 10 } = {}) {
     id: r.id,
     nombre: r.nombre,
     direccion: r.direccion,
+    mapaSvg: r.mapaSvg,
     schemaId: r.seatmapSchemaId,
     estado: r.seatmapSchemaId ? "Publicado" : "Sin mapa",
   }));
@@ -45,9 +46,15 @@ export async function crearRecinto(datos) {
   return data;
 }
 
-export async function vincularSchemaSeatmap(recintoId, schemaId) {
-  const { data } = await api.put(`/api/recintos/${recintoId}`, {
-    seatmapSchemaId: schemaId,
+// El PUT /api/recintos/{id} usa RecintoRequest completo (nombre y dirección
+// son obligatorios en el backend), no acepta un patch parcial con solo el
+// seatmapSchemaId. Por eso se manda el recinto completo con el nuevo schemaId.
+export async function vincularSchemaSeatmap(recinto, schemaId) {
+  const { data } = await api.put(`/api/recintos/${recinto.id}`, {
+    nombre: recinto.nombre,
+    direccion: recinto.direccion,
+    mapaSvg: recinto.mapaSvg || null,
+    seatmapSchemaId: Number(schemaId),
   });
   return data;
 }

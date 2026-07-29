@@ -13,11 +13,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-/**
- * Cliente chiquito para hablar con la API de seatmap.pro (Booking API v2).
- * No usamos ninguna librería extra, solo el HttpClient que ya trae Java,
- * igual que hicimos con Twilio.
- */
+
 @Component
 public class SeatmapClient {
 
@@ -29,13 +25,14 @@ public class SeatmapClient {
     @Value("${seatmap.organization-token}")
     private String organizationToken;
 
-    @Value("${seatmap.organization-id}")
+    
+    @Value("${seatmap.organization-id:}")
     private String organizationId;
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public boolean credencialesConfiguradas() {
-        return StringUtils.hasText(organizationToken) && StringUtils.hasText(organizationId);
+        return StringUtils.hasText(organizationToken);
     }
 
     // Manda una petición POST/PUT/DELETE con un cuerpo JSON y regresa el cuerpo de la respuesta (texto JSON)
@@ -48,8 +45,12 @@ public class SeatmapClient {
             HttpRequest.Builder builder = HttpRequest.newBuilder()
                     .uri(URI.create(baseUrl + path))
                     .header("Content-Type", "application/json")
-                    .header("X-API-Key", organizationToken)
-                    .header("X-Organization-ID", organizationId);
+                    .header("X-API-Key", organizationToken);
+
+            // X-Organization-ID solo se manda si están usando un tenant token
+            if (StringUtils.hasText(organizationId)) {
+                builder.header("X-Organization-ID", organizationId);
+            }
 
             HttpRequest.BodyPublisher cuerpo = cuerpoJson == null
                     ? HttpRequest.BodyPublishers.noBody()

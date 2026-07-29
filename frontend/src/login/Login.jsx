@@ -37,7 +37,9 @@ export default function Login() {
 
       login({ email: data.email, rol: data.rol }, data.token);
 
-      if (data.rol === "EMPRESA") navigate("/empresa/dashboard");
+      // El backend regresa el rol como "ROLE_EMPRESA" / "ROLE_CLIENTE" / "ROLE_ADMIN"
+      if (data.rol === "ROLE_EMPRESA") navigate("/empresa/dashboard");
+      else if (data.rol === "ROLE_ADMIN") navigate("/admin/dashboard");
       else navigate("/");
     } catch (err) {
       setErrorApi(

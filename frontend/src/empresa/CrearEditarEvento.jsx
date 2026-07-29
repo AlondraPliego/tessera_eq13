@@ -174,7 +174,7 @@ export default function CrearEditarEvento() {
           cantidadDisponible: Number(z.asientos),
         })),
       });
-      navigate("/organizador/dashboard");
+      navigate("/empresa/dashboard");
     } catch (error) {
       console.error("Error al crear el evento:", error);
       const mensaje = error.response?.data?.message || "No se pudo crear el evento.";
@@ -188,7 +188,7 @@ export default function CrearEditarEvento() {
     setGuardando(true);
     try {
       await cambiarEstadoEvento(eventoId, estadoSeleccionado);
-      navigate("/organizador/dashboard");
+      navigate("/empresa/dashboard");
     } catch (error) {
       console.error("Error al cambiar el estado del evento:", error);
       const mensaje = error.response?.data?.message || "No se pudo actualizar el estado.";
@@ -205,7 +205,7 @@ export default function CrearEditarEvento() {
   return (
     <div className="evento-form-page">
       <div className="evento-form-topbar">
-        <span className="evento-form-logo" onClick={() => navigate("/organizador/dashboard")}>
+        <span className="evento-form-logo" onClick={() => navigate("/empresa/dashboard")}>
           <img src={logo} alt="Tessera" className="evento-form-logo-img" />
           Tessera
         </span>

@@ -3,6 +3,8 @@ package com.TESSERA.Eq13Tessera.compras.controller;
 import com.TESSERA.Eq13Tessera.auth.entity.Usuario;
 import com.TESSERA.Eq13Tessera.compras.dto.CompraRequest;
 import com.TESSERA.Eq13Tessera.compras.dto.CompraResponse;
+import com.TESSERA.Eq13Tessera.compras.dto.MiBoletoResponse;
+import com.TESSERA.Eq13Tessera.compras.service.BoletoClienteService;
 import com.TESSERA.Eq13Tessera.compras.service.CompraService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -12,14 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/compras")
 public class CompraController {
 
     private final CompraService compraService;
+    private final BoletoClienteService boletoClienteService;
 
-    public CompraController(CompraService compraService) {
+    public CompraController(CompraService compraService, BoletoClienteService boletoClienteService) {
         this.compraService = compraService;
+        this.boletoClienteService = boletoClienteService;
     }
 
     // Solo un CLIENTE puede comprar boletos (ver SecurityConfig)
@@ -34,6 +40,13 @@ public class CompraController {
     @GetMapping("/mias")
     public ResponseEntity<Page<CompraResponse>> listarMias(Pageable pageable, Authentication authentication) {
         return ResponseEntity.ok(compraService.listarPorCliente(obtenerUsuarioId(authentication), pageable));
+    }
+
+    // GET /api/compras/mias/boletos -> "mis boletos" ya resueltos contra evento/zona/fecha,
+    // en el formato que necesita el frontend para "Mis boletos" (activos + historial).
+    @GetMapping("/mias/boletos")
+    public ResponseEntity<List<MiBoletoResponse>> listarMisBoletos(Authentication authentication) {
+        return ResponseEntity.ok(boletoClienteService.listarMisBoletos(obtenerUsuarioId(authentication)));
     }
 
     // GET /api/compras -> TODAS las compras, solo para el administrador

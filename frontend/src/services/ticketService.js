@@ -1,4 +1,4 @@
-import api from "./api";
+import api, { resolverUrlImagen } from "./api";
 
 // El backend no guarda un "asiento" individual (esa asignación puntual vive en
 // seatmap.pro y se resuelve solo durante la reserva, que se borra al confirmar
@@ -44,7 +44,7 @@ export async function getBoletosActivos() {
       seccion: b.seccion || "—",
       asiento: `${b.cantidad} boleto${b.cantidad === 1 ? "" : "s"}`,
       fecha: formatearFecha(b.fecha, b.hora),
-      posterUrl: b.flyerPrincipal || null,
+      posterUrl: b.flyerPrincipal ? resolverUrlImagen(b.flyerPrincipal) : null,
     }));
 }
 

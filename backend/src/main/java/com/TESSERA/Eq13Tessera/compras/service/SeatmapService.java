@@ -20,8 +20,7 @@ import java.util.Optional;
  *  2) Crear un precio y pintarlo sobre la zona correspondiente (para que el
  *     mapa se vea coloreado con el precio de cada sección).
  *
- * Si todavía no configuraron sus credenciales de seatmap.pro, este servicio
- * NO truena: solo se salta la parte de seatmap.pro y deja todo lo demás
+ 
  * (evento, zonas, boletos) funcionando normal en nuestra base de datos.
  */
 @Service
@@ -49,13 +48,12 @@ public class SeatmapService {
         String inicio = fecha.atTime(hora).toString();
         String fin = fecha.atTime(hora).plusHours(3).toString(); // duración estimada, editable después
 
+        // Campos según el modelo "Event" real de la API: name, schemaId, startDate, endDate
         ObjectNode body = objectMapper.createObjectNode();
-        body.putNull("id");
-        body.putNull("createdDate");
-        body.put("start", inicio);
-        body.put("endDate", fin);
         body.put("name", nombreEvento);
         body.put("schemaId", schemaId);
+        body.put("startDate", inicio);
+        body.put("endDate", fin);
 
         return client.enviar("POST", "/api/private/v2.0/events/", body.toString())
                 .flatMap(this::extraerId);
@@ -71,12 +69,11 @@ public class SeatmapService {
             return;
         }
 
-        // 1) Crear el precio
+        // 1) Crear el precio. Campos según el modelo "Price" real: name, price, currency
         ObjectNode price = objectMapper.createObjectNode();
-        price.putNull("id");
-        price.put("name", precio.toPlainString());
-        price.put("eventId", seatmapEventId);
-        price.putNull("externalId");
+        price.put("name", "$" + precio.toPlainString());
+        price.put("price", precio.doubleValue());
+        price.put("currency", "MXN");
         ArrayNode listaPrecios = objectMapper.createArrayNode().add(price);
 
         Optional<String> respuestaPrecio = client.enviar(
@@ -88,17 +85,15 @@ public class SeatmapService {
             return;
         }
 
-        // 2) Asignar ese precio a la zona (sección completa = "groupOfSeats")
-        ObjectNode grupo = objectMapper.createObjectNode();
-        grupo.put("objectId", seatmapObjectId);
-        grupo.put("assignmentId", priceId);
-        grupo.putNull("activeCount");
+        // 2) Asignar ese precio a la zona (sección completa).
+        // objectId = el id de la zona/sección dentro del mapa; assignmentId = el id del precio que acabamos de crear.
+        ObjectNode asignacion = objectMapper.createObjectNode();
+        asignacion.put("objectId", seatmapObjectId);
+        asignacion.put("assignmentId", priceId);
+        asignacion.putNull("activeCount");
+        ArrayNode listaAsignaciones = objectMapper.createArrayNode().add(asignacion);
 
-        ObjectNode seleccion = objectMapper.createObjectNode();
-        seleccion.set("seats", objectMapper.createArrayNode());
-        seleccion.set("groupOfSeats", objectMapper.createArrayNode().add(grupo));
-
-        client.enviar("POST", "/api/private/v2.0/event/" + seatmapEventId + "/prices/assignments/", seleccion.toString());
+        client.enviar("POST", "/api/private/v2.0/event/" + seatmapEventId + "/selection/", listaAsignaciones.toString());
     }
 
     /** Borra el evento de seatmap.pro (ej. cuando se elimina el evento en Tessera) */

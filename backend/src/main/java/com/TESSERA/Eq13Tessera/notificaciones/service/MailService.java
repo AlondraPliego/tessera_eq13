@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
+    @Async
     public void enviarCorreoRecuperacion(String destinatario, String token) {
         String asunto = "Recupera tu contraseña - Tessera";
         String cuerpo = "Recibimos una solicitud para restablecer tu contraseña.\n\n"
@@ -31,6 +33,7 @@ public class MailService {
         enviar(destinatario, asunto, cuerpo);
     }
 
+    @Async
     public void enviarCorreoBienvenida(String destinatario, String nombre) {
         String asunto = "¡Bienvenido a Tessera!";
         String cuerpo = "Hola " + nombre + ",\n\n"
@@ -40,6 +43,7 @@ public class MailService {
         enviar(destinatario, asunto, cuerpo);
     }
 
+    @Async
     public void enviarCorreoConfirmacionCompra(String destinatario, Long compraId, BigDecimal total) {
         String asunto = "Confirmación de compra #" + compraId + " - Tessera";
         String cuerpo = "¡Gracias por tu compra!\n\n"
@@ -49,7 +53,7 @@ public class MailService {
         enviar(destinatario, asunto, cuerpo);
     }
 
-    // Método genérico: arma el correo y lo manda con JavaMailSender (que usa Postfix)
+    // Método genérico: arma el correo y lo manda con JavaMailSender
     private void enviar(String destinatario, String asunto, String cuerpo) {
         try {
             SimpleMailMessage mensaje = new SimpleMailMessage();
@@ -61,7 +65,6 @@ public class MailService {
             log.info("Correo enviado a {}", destinatario);
         } catch (Exception e) {
             // No tumbamos la petición del usuario solo porque el correo falló
-            // (por ejemplo, si Postfix no está configurado en tu compu local).
             log.error("No se pudo enviar el correo a {}: {}", destinatario, e.getMessage());
         }
     }

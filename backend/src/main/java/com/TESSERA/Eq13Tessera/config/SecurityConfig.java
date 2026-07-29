@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/reservas").hasRole("CLIENTE")
                 .requestMatchers(HttpMethod.DELETE, "/api/reservas/**").hasRole("CLIENTE")
                 // Compras: solo CLIENTE compra y cancela; solo ADMIN ve el listado completo
+                .requestMatchers(HttpMethod.GET, "/api/compras/mias/boletos").hasRole("CLIENTE")
                 .requestMatchers(HttpMethod.GET, "/api/compras/mias").hasRole("CLIENTE")
                 .requestMatchers(HttpMethod.GET, "/api/compras/{id}").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/compras").hasRole("ADMIN")

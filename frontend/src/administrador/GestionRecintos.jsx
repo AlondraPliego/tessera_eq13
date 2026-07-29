@@ -12,7 +12,10 @@ export default function GestionRecintos() {
 
   const [nuevoRecinto, setNuevoRecinto] = useState({ nombre: "", direccion: "" });
   const [vinculando, setVinculando] = useState(null); 
-  const [schemaForm, setSchemaForm] = useState({ schemaId: "", publicKey: "" });
+  // El backend solo maneja un seatmapSchemaId por recinto; la public key de
+  // Seatmap Pro es una sola y es global (la da /api/seatmap/config), no hay
+  // una key distinta por recinto.
+  const [schemaForm, setSchemaForm] = useState({ schemaId: "" });
 
   useEffect(() => {
     async function cargar() {
@@ -42,17 +45,18 @@ export default function GestionRecintos() {
 
   const handleAbrirVincular = (recintoId) => {
     setVinculando(recintoId);
-    setSchemaForm({ schemaId: "", publicKey: "" });
+    setSchemaForm({ schemaId: "" });
   };
 
   const handleGuardarSchema = async (recintoId) => {
-    if (!schemaForm.schemaId || !schemaForm.publicKey) return;
+    if (!schemaForm.schemaId) return;
     try {
-      await vincularSchemaSeatmap(recintoId, schemaForm.schemaId, schemaForm.publicKey);
+      const recinto = recintos.find((r) => r.id === recintoId);
+      const actualizado = await vincularSchemaSeatmap(recinto, schemaForm.schemaId);
       setRecintos((prev) =>
         prev.map((r) =>
           r.id === recintoId
-            ? { ...r, schemaId: schemaForm.schemaId, publicKey: schemaForm.publicKey, estado: "Publicado" }
+            ? { ...r, schemaId: actualizado.seatmapSchemaId, estado: "Publicado" }
             : r
         )
       );
@@ -69,10 +73,10 @@ export default function GestionRecintos() {
   return (
     <div className="recintos-page">
       <div className="recintos-topbar">
-        <span className="recintos-logo" onClick={() => navigate("/admin/dashboard")}>
+        <span className="recintos-logo" onClick={() => navigate("/empresa/dashboard")}>
           Tessera
         </span>
-        <button className="recintos-volver-btn" onClick={() => navigate("/admin/dashboard")}>
+        <button className="recintos-volver-btn" onClick={() => navigate("/empresa/dashboard")}>
           Volver al dashboard
         </button>
       </div>
@@ -125,12 +129,12 @@ export default function GestionRecintos() {
             </span>
 
             <div className="recinto-actions">
-              
+              <a
                 href={SEATMAP_EDITOR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="recinto-btn-editor"
-            <a>
+              >
                 Abrir Editor de mapa
               </a>
               <button
@@ -144,20 +148,13 @@ export default function GestionRecintos() {
             {vinculando === recinto.id && (
               <div className="recinto-vincular-form">
                 <p className="recinto-vincular-help">
-                  Copia el <strong>Schema ID</strong> y el <strong>Public API Key</strong> desde
-                  el panel de administración de tu organización en Seatmap Pro.
+                  Copia el <strong>Schema ID</strong> desde el Editor de Seatmap Pro para este recinto.
                 </p>
                 <input
                   type="text"
                   placeholder="Schema ID (ej. 3275)"
                   value={schemaForm.schemaId}
                   onChange={(e) => setSchemaForm({ ...schemaForm, schemaId: e.target.value })}
-                />
-                <input
-                  type="text"
-                  placeholder="Public API Key (ej. pk_...)"
-                  value={schemaForm.publicKey}
-                  onChange={(e) => setSchemaForm({ ...schemaForm, publicKey: e.target.value })}
                 />
                 <div className="recinto-vincular-buttons">
                   <button

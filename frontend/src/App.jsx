@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import Login from './login/Login';
 import RegistroCliente from './registro/RegistroCliente';
 import RegistroEmpresa from './registro/RegistroEmpresa';
@@ -11,8 +10,8 @@ import MisBoletos from './cliente/MisBoletos';
 import Perfil from './cliente/Perfil';
 import DashboardEmpresa from './empresa/Dashboard';
 import CrearEditarEvento from './empresa/CrearEditarEvento';
-import DashboardAdmin from './administrador/DashboardAdmin';
 import GestionRecintos from './administrador/GestionRecintos';
+import DashboardAdmin from './administrador/DashboardAdmin';
 
 function App() {
   return (
@@ -27,18 +26,20 @@ function App() {
 
           {/* pag cliente */}
           <Route path="/carrito" element={<Carrito />} />
-          <Route path="/evento/:id/asientos" element={<SeleccionAsientos />} />
-          <Route path="/confirmacion" element={<Confirmacion />} />
+          <Route path="/evento/:eventoId/asientos" element={<SeleccionAsientos />} />
+          {/* Carrito.jsx navega a /confirmacion/:folio, hacia falta el parametro */}
+          <Route path="/confirmacion/:folio" element={<Confirmacion />} />
           <Route path="/mis-boletos" element={<MisBoletos />} />
           <Route path="/perfil" element={<Perfil />} />
 
-          {/* pag empresa */}
+          {/* pag empresa (el backend solo permite ROLE_EMPRESA crear/editar recintos y eventos) */}
           <Route path="/empresa/dashboard" element={<DashboardEmpresa />} />
           <Route path="/empresa/evento/nuevo" element={<CrearEditarEvento />} />
+          <Route path="/empresa/evento/:eventoId/editar" element={<CrearEditarEvento />} />
+          <Route path="/empresa/recintos" element={<GestionRecintos />} />
 
           {/* pag administrador */}
           <Route path="/admin/dashboard" element={<DashboardAdmin />} />
-          <Route path="/admin/recintos" element={<GestionRecintos />} />
         </Routes>
       </div>
     </>

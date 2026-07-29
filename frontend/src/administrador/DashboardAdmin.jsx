@@ -51,10 +51,6 @@ export default function DashboardAdmin() {
         </span>
 
         <div className="admin-nav-right">
-          <button className="admin-recintos-btn" onClick={() => navigate("/admin/recintos")}>
-            Recintos
-          </button>
-
           <div className="admin-dropdown-wrapper">
             <button
               className="admin-usuario-btn"
