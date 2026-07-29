@@ -45,6 +45,7 @@ export default function Home() {
 
   return (
     <div className="home-page">
+      
       <nav className="home-navbar">
         <span className="home-logo">
           <img src={logo} alt="Tessera" className="home-logo-img" />
@@ -57,8 +58,8 @@ export default function Home() {
         </div>
 
         <div className="home-nav-links">
-          <Link to="/compras">Compras</Link>
-          <Link to="/historial">Historial</Link>
+          <Link to="/carrito">Compras</Link>
+          <Link to="/mis-boletos">Historial</Link>
           <Link to="/eventos">Eventos</Link>
           <Link to="/login" className="home-login-btn">
             Iniciar sesión

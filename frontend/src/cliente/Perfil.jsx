@@ -4,6 +4,7 @@ import { useValidacion } from "../hooks/useValidacion";
 import { requerido, esEmail } from "../hooks/validadores";
 import FormField from "../components/FormField";
 import "./Perfil.css";
+import { enviarNotificacionPrueba } from '../services/notificationService';
 
 export default function Perfil() {
   const navigate = useNavigate();
@@ -23,6 +24,20 @@ export default function Perfil() {
       telefono: [requerido],
     }
   );
+
+  const handleProbarNotificacion = async (canal, destinatario) => {
+    try {
+      await enviarNotificacionPrueba({
+        canal: canal, // 'WHATSAPP', 'SMS' o 'MAIL'
+        destinatario: destinatario, // Número de teléfono o correo
+        mensaje: "¡Hola! Esta es una prueba de tus boletos desde TESSERA."
+      });
+      alert(`Notificación enviada exitosamente por ${canal}`);
+    } catch (error) {
+      console.error("Error al enviar la notificación:", error);
+      alert("No se pudo enviar la notificación");
+    }
+  };
 
   const handleGuardar = () => {
     if (!validar()) return;

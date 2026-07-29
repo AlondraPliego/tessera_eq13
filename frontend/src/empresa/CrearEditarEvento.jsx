@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { subirImagen } from '../services/uploadService';
 import { useParams, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import { useValidacion } from "../hooks/useValidacion";
@@ -28,6 +29,23 @@ export default function CrearEditarEvento() {
       fechaHora: [requerido],
     }
   );
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const uploadResponse = await subirImagen(file);
+      // Actualizas tu estado con la URL de la imagen que te devolvió el backend
+      setEventoForm({
+        ...eventoForm,
+        imagenUrl: uploadResponse.url 
+      });
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      alert("Hubo un problema al subir la imagen");
+    }
+  };
 
   const [nuevaZona, setNuevaZona] = useState({
     zona: "",

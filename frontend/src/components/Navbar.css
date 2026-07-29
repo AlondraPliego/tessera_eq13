@@ -1,0 +1,81 @@
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e2c3a; 
+  padding: 15px 40px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.navbar-logo a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.logo-tessera {
+  font-family: 'Georgia', serif;
+  font-size: 28px;
+  font-weight: bold;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.navbar-search {
+  position: relative;
+  flex: 1;
+  max-width: 450px;
+  margin: 0 30px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-search input {
+  width: 100%;
+  padding: 12px 40px 12px 20px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: #333;
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.navbar-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.navbar-links a:hover {
+  opacity: 0.8;
+}
+
+.btn-iniciar-sesion {
+  background-color: #ffffff;
+  color: #1e2c3a;
+  padding: 10px 24px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-iniciar-sesion:hover {
+  background-color: #f0f0f0;
+}
