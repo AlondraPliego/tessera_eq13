@@ -1,0 +1,49 @@
+meta {
+  name: 12 - Crear Evento
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/api/eventos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenEmpresa}}
+}
+
+body:json {
+  {
+    "nombre": "Concierto de Prueba",
+    "descripcion": "Evento creado desde Bruno para pruebas",
+    "fechas": [
+      {
+        "fecha": "2026-12-15",
+        "hora": "20:00:00",
+        "ciudad": "Puerto Escondido",
+        "recintoId": {{recintoId}}
+      }
+    ],
+    "boletos": [
+      {
+        "zonaId": {{zonaId}},
+        "precio": 250.00,
+        "cantidadDisponible": 100
+      }
+    ]
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("eventoId", data.id);
+  if (data.boletos && data.boletos.length > 0) {
+    bru.setEnvVar("boletoEventoId", data.boletos[0].id);
+  }
+}
+
+assert {
+  res.status: eq 201
+}

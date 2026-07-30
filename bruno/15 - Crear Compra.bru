@@ -1,0 +1,31 @@
+meta {
+  name: 15 - Crear Compra
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/api/compras
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "detalles": [
+      {
+        "boletoEventoId": {{boletoEventoId}},
+        "cantidad": 1,
+        "reservaId": {{reservaId}}
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 201
+}
