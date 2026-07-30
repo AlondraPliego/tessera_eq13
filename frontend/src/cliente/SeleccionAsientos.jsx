@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useParams, useSearchParams, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import eventoPlaceholder from "../assets/img/modalejemplo.png";
@@ -6,8 +6,8 @@ import mapaPlaceholder from "../assets/img/mapaejemplo.png";
 import { getEventoParaAsientos } from "../services/venueService";
 import { crearReserva, liberarReserva } from "../services/cartService";
 import { resolverUrlImagen } from "../services/api";
+import { SeatmapBookingRenderer } from "@seatmap.pro/renderer";
 import "./SeleccionAsientos.css";
-
 
 export default function SeleccionAsientos() {
   const { eventoId } = useParams();
@@ -20,6 +20,7 @@ export default function SeleccionAsientos() {
   const [reservando, setReservando] = useState(null);
   const [error, setError] = useState(null);
   const [seleccionados, setSeleccionados] = useState([]);
+  const mapaRef = useRef(null);
 
   useEffect(() => {
     async function cargarDatos() {
@@ -44,6 +45,19 @@ export default function SeleccionAsientos() {
       });
     };
   }, []);
+
+  // Inicializa el widget de seatmap.pro cuando ya tenemos los datos del evento
+  useEffect(() => {
+    if (!datos?.seatmapEventId || !datos?.seatmapPublicKey || !mapaRef.current) return;
+
+    const renderer = new SeatmapBookingRenderer(mapaRef.current, {
+      publicKey: datos.seatmapPublicKey,
+      onSeatSelect: (seat) => console.log("seleccionado", seat),
+      onSeatDeselect: (seat) => console.log("deseleccionado", seat),
+    });
+
+    renderer.loadEvent(datos.seatmapEventId);
+  }, [datos?.seatmapEventId, datos?.seatmapPublicKey]);
 
   const handleSeleccionarSeccion = async (seccion) => {
     setError(null);
@@ -114,10 +128,10 @@ export default function SeleccionAsientos() {
 
       <div className="asientos-evento-info">
         <img
-  src={datos.imagenUrl ? resolverUrlImagen(datos.imagenUrl) : eventoPlaceholder}
-  alt={datos.nombreEvento}
-  className="asientos-evento-img"
-/>
+          src={datos.imagenUrl ? resolverUrlImagen(datos.imagenUrl) : eventoPlaceholder}
+          alt={datos.nombreEvento}
+          className="asientos-evento-img"
+        />
         <div>
           <h1 className="asientos-evento-nombre">{datos.nombreEvento}</h1>
           <p className="asientos-evento-fecha">
@@ -144,8 +158,11 @@ export default function SeleccionAsientos() {
           </div>
 
           <div className="asientos-mapa">
-            <img src={datos.mapaUrl || mapaPlaceholder} alt="Mapa del recinto" />
-            {/* aqui falta el seatmap */}
+            {datos.seatmapEventId ? (
+              <div ref={mapaRef} style={{ width: "100%", height: "500px" }} />
+            ) : (
+              <img src={datos.mapaUrl || mapaPlaceholder} alt="Mapa del recinto" />
+            )}
           </div>
         </div>
 

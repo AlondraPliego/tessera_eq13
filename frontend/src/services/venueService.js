@@ -9,6 +9,7 @@ export async function getEventoParaAsientos(eventoId, fechaId) {
 
   const { data: zonas } = await api.get(`/api/recintos/${fecha.recintoId}/zonas`);
   const zonaPorId = Object.fromEntries(zonas.map((z) => [z.id, z]));
+const seatmap = await getSeatmapConfig(fecha.id).catch(() => null);
 
   return {
     nombreEvento: evento.nombre,
@@ -16,7 +17,8 @@ export async function getEventoParaAsientos(eventoId, fechaId) {
     fecha: fecha.fecha,
     hora: fecha.hora,
     recinto: fecha.ciudad,
-    mapaUrl: null,
+    seatmapEventId: seatmap?.seatmapEventId || null,
+  seatmapPublicKey: seatmap?.publicKey || null,
     secciones: evento.boletos.map((b) => ({
       id: b.id,
       nombre: zonaPorId[b.zonaId]?.nombre || `Zona ${b.zonaId}`,
@@ -57,4 +59,8 @@ export async function vincularSchemaSeatmap(recinto, schemaId) {
     seatmapSchemaId: Number(schemaId),
   });
   return data;
+}
+export async function getSeatmapConfig(fechaId) {
+  const { data } = await api.get(`/api/eventos/fechas/${fechaId}/seatmap`);
+  return data; // { seatmapEventId, publicKey }
 }
