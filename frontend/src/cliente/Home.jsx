@@ -6,11 +6,13 @@ import { getEventosRecomendados } from "../services/eventService";
 import EventCard from "../components/EventCard";
 import Pagination from "../components/Pagination";
 import EventDetailModal from "../components/EventDetailModal"; 
+import { useAuth } from "../AuthContext";
 import "./Home.css";
 
 const CATEGORIAS = ["Todos", "Conciertos", "Festivales", "Deportes", "Teatro y Musicales"];
 
 export default function Home() {
+  const { user } = useAuth();
   const [categoriaActiva, setCategoriaActiva] = useState("Todos");
   const [paginaActual, setPaginaActual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
@@ -61,9 +63,15 @@ export default function Home() {
           <Link to="/carrito">Compras</Link>
           <Link to="/mis-boletos">Historial</Link>
           <Link to="/eventos">Eventos</Link>
-          <Link to="/login" className="home-login-btn">
-            Iniciar sesión
-          </Link>
+          {user ? (
+            <Link to="/perfil" className="home-login-btn">
+              <i className="ti ti-user"></i> {user.nombre || user.email}
+            </Link>
+          ) : (
+            <Link to="/login" className="home-login-btn">
+              Iniciar sesión
+            </Link>
+          )}
         </div>
       </nav>
 

@@ -13,6 +13,7 @@ export default function RegistroCliente() {
     {
       nombreCompleto: "",
       nombreUsuario: "",
+      telefonoUsuario: "",
       correo: "",
       contrasena: "",
       confirmarContrasena: "",
@@ -40,6 +41,7 @@ export default function RegistroCliente() {
       await api.post("/api/auth/register", {
         nombre: form.nombreCompleto,
         nombreUsuario: form.nombreUsuario,
+        telefono: form.telefonoUsuario,
         email: form.correo,
         password: form.contrasena,
         rolNombre: "CLIENTE",

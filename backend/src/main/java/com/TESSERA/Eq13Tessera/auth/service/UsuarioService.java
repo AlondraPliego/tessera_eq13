@@ -1,5 +1,8 @@
 package com.TESSERA.Eq13Tessera.auth.service;
 
+import com.TESSERA.Eq13Tessera.auth.dto.ActualizarPerfilClienteRequestDTO;
+import com.TESSERA.Eq13Tessera.auth.dto.PerfilClienteResponseDTO;
+import com.TESSERA.Eq13Tessera.auth.dto.PerfilEmpresaResponseDTO;
 import com.TESSERA.Eq13Tessera.auth.dto.RegisterRequestDTO;
 import com.TESSERA.Eq13Tessera.auth.entity.Cliente;
 import com.TESSERA.Eq13Tessera.auth.entity.Empresa;
@@ -12,6 +15,7 @@ import com.TESSERA.Eq13Tessera.auth.repository.ClienteRepository;
 import com.TESSERA.Eq13Tessera.auth.repository.EmpresaRepository;
 import com.TESSERA.Eq13Tessera.auth.repository.RolRepository;
 import com.TESSERA.Eq13Tessera.auth.repository.UsuarioRepository;
+import com.TESSERA.Eq13Tessera.common.exception.ResourceNotFoundException;
 import com.TESSERA.Eq13Tessera.notificaciones.service.MailService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,8 +61,7 @@ public class UsuarioService implements UserDetailsService {
             throw new UsuarioYaExisteException("Ya existe una cuenta con ese correo");
         }
 
-        // Solo se pueden crear cuentas de CLIENTE o EMPRESA desde este endpoint.
-        // La cuenta ADMIN no se auto-registra, se crea directamente en la base de datos.
+        // solo cliente y empresa para crear
         String nombreRol = dto.getRolNombre().toUpperCase();
         if (!nombreRol.equals("CLIENTE") && !nombreRol.equals("EMPRESA")) {
             throw new RolNoEncontradoException(
@@ -95,6 +98,65 @@ public class UsuarioService implements UserDetailsService {
             throw new DatosRegistroInvalidosException("Ese nombre de usuario ya está en uso");
         }
         clienteRepository.save(new Cliente(usuario, dto.getNombreUsuario(), dto.getTelefono()));
+    }
+
+    @Transactional(readOnly = true)
+    public PerfilClienteResponseDTO obtenerPerfilCliente(Long usuarioId) {
+        Cliente cliente = clienteRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el perfil de cliente"));
+        Usuario usuario = cliente.getUsuario();
+
+        return new PerfilClienteResponseDTO(
+                usuario.getNombre(),
+                cliente.getApellidos(),
+                usuario.getEmail(),
+                cliente.getTelefono(),
+                cliente.getFechaNacimiento()
+        );
+    }
+
+    @Transactional
+    public PerfilClienteResponseDTO actualizarPerfilCliente(Long usuarioId, ActualizarPerfilClienteRequestDTO dto) {
+        Cliente cliente = clienteRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el perfil de cliente"));
+        Usuario usuario = cliente.getUsuario();
+
+        if (!usuario.getEmail().equalsIgnoreCase(dto.getCorreo())
+                && usuarioRepository.existsByEmail(dto.getCorreo())) {
+            throw new UsuarioYaExisteException("Ya existe una cuenta con ese correo");
+        }
+
+        usuario.setNombre(dto.getNombre());
+        usuario.setEmail(dto.getCorreo());
+        cliente.setApellidos(dto.getApellidos());
+        cliente.setTelefono(dto.getTelefono());
+        cliente.setFechaNacimiento(dto.getFechaNacimiento());
+
+        usuarioRepository.save(usuario);
+        clienteRepository.save(cliente);
+
+        return new PerfilClienteResponseDTO(
+                usuario.getNombre(),
+                cliente.getApellidos(),
+                usuario.getEmail(),
+                cliente.getTelefono(),
+                cliente.getFechaNacimiento()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public PerfilEmpresaResponseDTO obtenerPerfilEmpresa(Long usuarioId) {
+        Empresa empresa = empresaRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el perfil de empresa"));
+        Usuario usuario = empresa.getUsuario();
+
+        return new PerfilEmpresaResponseDTO(
+                empresa.getNombreEmpresa(),
+                empresa.getRfc(),
+                usuario.getEmail(),
+                empresa.getTelefono(),
+                empresa.getSitioWeb()
+        );
     }
 
     private void crearDatosEmpresa(Usuario usuario, RegisterRequestDTO dto) {

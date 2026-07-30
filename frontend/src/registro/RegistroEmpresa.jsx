@@ -42,9 +42,6 @@ export default function RegistroEmpresa() {
     setErrorApi("");
     setEnviando(true);
     try {
-      // ⚠️ El backend hoy solo guarda nombre, email, password y rolNombre.
-      // rfc, telefono, sitioWeb y nombreEmpresa NO se guardan todavía:
-      // hace falta ampliar RegisterRequestDTO y el modelo en el backend.
       await api.post("/api/auth/register", {
         nombre: form.nombreResponsable,
         nombreEmpresa: form.nombreEmpresa,
