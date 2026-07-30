@@ -1,22 +1,29 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import { useValidacion } from "../hooks/useValidacion";
 import { requerido, esEmail } from "../hooks/validadores";
 import FormField from "../components/FormField";
+import api from "../services/api";
 import "./Perfil.css";
 import { enviarNotificacionPrueba } from '../services/notificationService';
 
+const FORM_VACIO = {
+  nombre: "",
+  apellidos: "",
+  correo: "",
+  telefono: "",
+  fechaNacimiento: "",
+};
+
 export default function Perfil() {
   const navigate = useNavigate();
+  const [cargando, setCargando] = useState(true);
+  const [errorCarga, setErrorCarga] = useState("");
+  const [guardando, setGuardando] = useState(false);
 
   const { form, errores, handleChange, validar, setForm } = useValidacion(
-    {
-      nombre: "Alondra",
-      apellidos: "Pliego Mendez",
-      correo: "alondrapliego131104@gmail.com",
-      telefono: "9518737324",
-      fechaNacimiento: "2004-11-13",
-    },
+    FORM_VACIO,
     {
       nombre: [requerido],
       apellidos: [requerido],
@@ -24,6 +31,36 @@ export default function Perfil() {
       telefono: [requerido],
     }
   );
+
+  useEffect(() => {
+    let activo = true;
+
+    const cargarPerfil = async () => {
+      try {
+        const { data } = await api.get("/api/usuario/perfil");
+        if (!activo) return;
+        setForm({
+          nombre: data.nombre ?? "",
+          apellidos: data.apellidos ?? "",
+          correo: data.correo ?? "",
+          telefono: data.telefono ?? "",
+          fechaNacimiento: data.fechaNacimiento ?? "",
+        });
+      } catch (error) {
+        console.error("Error al cargar el perfil:", error);
+        if (activo) {
+          setErrorCarga("No se pudo cargar tu información. Intenta recargar la página.");
+        }
+      } finally {
+        if (activo) setCargando(false);
+      }
+    };
+
+    cargarPerfil();
+    return () => {
+      activo = false;
+    };
+  }, [setForm]);
 
   const handleProbarNotificacion = async (canal, destinatario) => {
     try {
@@ -39,20 +76,43 @@ export default function Perfil() {
     }
   };
 
-  const handleGuardar = () => {
+  const handleGuardar = async () => {
     if (!validar()) return;
-    // aquí luego conectamos con api.js: api.put("/api/usuario/perfil", form)
-    console.log("Guardar perfil:", form);
+    setGuardando(true);
+    try {
+      const { data } = await api.put("/api/usuario/perfil", form);
+      setForm({
+        nombre: data.nombre ?? "",
+        apellidos: data.apellidos ?? "",
+        correo: data.correo ?? "",
+        telefono: data.telefono ?? "",
+        fechaNacimiento: data.fechaNacimiento ?? "",
+      });
+      alert("Perfil actualizado correctamente");
+    } catch (error) {
+      console.error("Error al guardar el perfil:", error);
+      alert(
+        error.response?.data?.message ||
+          "No se pudieron guardar los cambios. Intenta de nuevo."
+      );
+    } finally {
+      setGuardando(false);
+    }
   };
 
-  const handleCancelar = () => {
-    setForm({
-      nombre: "Alondra",
-      apellidos: "Pliego Mendez",
-      correo: "alondrapliego131104@gmail.com",
-      telefono: "9518737324",
-      fechaNacimiento: "2004-11-13",
-    });
+  const handleCancelar = async () => {
+    try {
+      const { data } = await api.get("/api/usuario/perfil");
+      setForm({
+        nombre: data.nombre ?? "",
+        apellidos: data.apellidos ?? "",
+        correo: data.correo ?? "",
+        telefono: data.telefono ?? "",
+        fechaNacimiento: data.fechaNacimiento ?? "",
+      });
+    } catch (error) {
+      console.error("Error al recargar el perfil:", error);
+    }
   };
 
   const handleCerrarSesion = () => {
@@ -122,6 +182,9 @@ export default function Perfil() {
         <div className="perfil-form-card">
           <h2 className="perfil-form-title">Datos personales</h2>
 
+          {cargando && <p className="perfil-subtitle">Cargando tu información…</p>}
+          {errorCarga && <p className="input-error">{errorCarga}</p>}
+
           <div className="perfil-form-grid">
             <FormField
               icon="ti-user"
@@ -133,16 +196,7 @@ export default function Perfil() {
               error={errores.nombre}
               label="Nombre"
             />
-            <FormField
-              icon="ti-user"
-              type="text"
-              name="apellidos"
-              placeholder="Apellidos"
-              value={form.apellidos}
-              onChange={handleChange}
-              error={errores.apellidos}
-              label="Apellidos"
-            />
+            
           </div>
 
           <FormField
@@ -167,23 +221,23 @@ export default function Perfil() {
               error={errores.telefono}
               label="Teléfono"
             />
-            <FormField
-              icon="ti-calendar"
-              type="date"
-              name="fechaNacimiento"
-              value={form.fechaNacimiento}
-              onChange={handleChange}
-              error={errores.fechaNacimiento}
-              label="Fecha de nacimiento"
-            />
+
           </div>
 
           <div className="perfil-form-buttons">
-            <button className="perfil-btn-cancelar" onClick={handleCancelar}>
+            <button
+              className="perfil-btn-cancelar"
+              onClick={handleCancelar}
+              disabled={cargando || guardando}
+            >
               Cancelar
             </button>
-            <button className="perfil-btn-guardar" onClick={handleGuardar}>
-              Guardar cambios
+            <button
+              className="perfil-btn-guardar"
+              onClick={handleGuardar}
+              disabled={cargando || guardando}
+            >
+              {guardando ? "Guardando..." : "Guardar cambios"}
             </button>
           </div>
         </div>

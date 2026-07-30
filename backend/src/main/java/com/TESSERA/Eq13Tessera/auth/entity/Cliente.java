@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Datos extra que solo tienen los usuarios con rol CLIENTE.
- * Comparte la llave primaria con "usuario" (usuario_id).
- */
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -18,7 +16,7 @@ public class Cliente {
     @Column(name = "usuario_id")
     private Long usuarioId;
 
-    // @MapsId le dice a JPA: "el id de esta tabla ES el id del usuario asociado"
+    // @MapsId sirve para decir que el id de esta tabla es el id del usuario asociado
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "usuario_id")
@@ -27,8 +25,14 @@ public class Cliente {
     @Column(name = "nombre_usuario", nullable = false, unique = true)
     private String nombreUsuario;
 
+    @Column(name = "apellidos")
+    private String apellidos;
+
     @Column(name = "telefono")
     private String telefono;
+
+    @Column(name = "fecha_nacimiento")
+    private LocalDate fechaNacimiento;
 
     public Cliente(Usuario usuario, String nombreUsuario, String telefono) {
         this.usuario = usuario;
