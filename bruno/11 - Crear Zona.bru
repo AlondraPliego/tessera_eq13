@@ -1,0 +1,32 @@
+meta {
+  name: 11 - Crear Zona
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/recintos/{{recintoId}}/zonas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenEmpresa}}
+}
+
+body:json {
+  {
+    "nombre": "General",
+    "capacidad": 100,
+    "color": "#FF5733"
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("zonaId", data.id);
+}
+
+assert {
+  res.status: eq 201
+}

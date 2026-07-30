@@ -1,0 +1,31 @@
+meta {
+  name: 14 - Crear Reserva
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/api/reservas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "boletoEventoId": {{boletoEventoId}},
+    "cantidad": 1
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("reservaId", data.id);
+}
+
+assert {
+  res.status: eq 201
+}

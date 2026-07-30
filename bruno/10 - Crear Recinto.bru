@@ -1,0 +1,31 @@
+meta {
+  name: 10 - Crear Recinto
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/recintos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenEmpresa}}
+}
+
+body:json {
+  {
+    "nombre": "Teatro Tessera",
+    "direccion": "Av. Principal 123, Puerto Escondido"
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("recintoId", data.id);
+}
+
+assert {
+  res.status: eq 201
+}

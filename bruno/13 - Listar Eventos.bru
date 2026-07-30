@@ -1,0 +1,15 @@
+meta {
+  name: 13 - Listar Eventos
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/api/eventos
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
