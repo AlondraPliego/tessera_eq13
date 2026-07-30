@@ -21,11 +21,15 @@ body:json {
   }
 }
 
-script:post-response {
-  const data = res.getBody();
-  bru.setEnvVar("reservaId", data.id);
+vars:pre-request {
+  baseUrl: https://tessera.rocks
 }
 
 assert {
   res.status: eq 201
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("reservaId", data.id);
 }

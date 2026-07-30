@@ -26,6 +26,10 @@ body:json {
   }
 }
 
+vars:pre-request {
+  baseUrl: https://tessera.rocks
+}
+
 assert {
   res.status: eq 201
 }

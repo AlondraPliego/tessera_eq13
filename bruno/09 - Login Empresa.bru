@@ -17,11 +17,15 @@ body:json {
   }
 }
 
-script:post-response {
-  const data = res.getBody();
-  bru.setEnvVar("tokenEmpresa", data.token);
+vars:pre-request {
+  baseUrl: https://tessera.rocks
 }
 
 assert {
   res.status: eq 200
+}
+
+script:post-response {
+  const data = res.getBody();
+  bru.setEnvVar("tokenEmpresa", data.token);
 }

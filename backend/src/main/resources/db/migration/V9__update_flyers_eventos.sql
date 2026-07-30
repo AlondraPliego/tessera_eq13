@@ -1,0 +1,15 @@
+UPDATE evento SET flyer_principal = '/uploads/flyers/img1.jpg'  WHERE id = 1;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img2.jpg'  WHERE id = 2;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img3.jpg'  WHERE id = 3;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img4.jpg'  WHERE id = 4;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img5.jpg'  WHERE id = 5;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img6.jpg'  WHERE id = 6;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img7.jpg'  WHERE id = 7;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img8.jpg'  WHERE id = 8;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img9.jpg'  WHERE id = 9;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img10.jpg' WHERE id = 10;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img11.jpg' WHERE id = 11;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img12.jpg' WHERE id = 12;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img13.jpg' WHERE id = 13;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img14.jpg' WHERE id = 14;
+UPDATE evento SET flyer_principal = '/uploads/flyers/img15.jpg' WHERE id = 15;
