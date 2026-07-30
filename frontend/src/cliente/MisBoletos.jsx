@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import logo from "../assets/img/logo.png";
 import posterPlaceholder from "../assets/img/modalejemplo.png";
 import { getBoletosActivos, getHistorialEventos } from "../services/ticketService";
+import { useAuth } from "../AuthContext";
 import "./MisBoletos.css";
 import { Link } from "react-router-dom";
 export default function MisBoletos() {
+  const { user } = useAuth();
   const [boletos, setBoletos] = useState([]);
   const [historial, setHistorial] = useState([]);
   const [indiceActivo, setIndiceActivo] = useState(0);
@@ -56,7 +58,16 @@ export default function MisBoletos() {
           <i className="ti ti-search"></i>
         </div>
 
-        <Link to="/perfil" className="home-login-btn">
+        <Link
+          to={
+            user?.rol === "ROLE_EMPRESA"
+              ? "/empresa/dashboard"
+              : user?.rol === "ROLE_ADMIN"
+              ? "/admin/dashboard"
+              : "/perfil"
+          }
+          className="home-login-btn"
+        >
   <i className="ti ti-user"></i>
   Usuario
 </Link>

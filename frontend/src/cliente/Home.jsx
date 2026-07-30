@@ -64,7 +64,16 @@ export default function Home() {
           <Link to="/mis-boletos">Historial</Link>
           <Link to="/eventos">Eventos</Link>
           {user ? (
-            <Link to="/perfil" className="home-login-btn">
+            <Link
+              to={
+                user.rol === "ROLE_EMPRESA"
+                  ? "/empresa/dashboard"
+                  : user.rol === "ROLE_ADMIN"
+                  ? "/admin/dashboard"
+                  : "/perfil"
+              }
+              className="home-login-btn"
+            >
               <i className="ti ti-user"></i> {user.nombre || user.email}
             </Link>
           ) : (

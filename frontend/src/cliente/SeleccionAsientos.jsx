@@ -6,6 +6,7 @@ import mapaPlaceholder from "../assets/img/mapaejemplo.png";
 import { getEventoParaAsientos } from "../services/venueService";
 import { crearReserva, liberarReserva } from "../services/cartService";
 import { resolverUrlImagen } from "../services/api";
+import { useAuth } from "../AuthContext";
 import { SeatmapBookingRenderer } from "@seatmap.pro/renderer";
 import "./SeleccionAsientos.css";
 
@@ -14,6 +15,7 @@ export default function SeleccionAsientos() {
   const [searchParams] = useSearchParams();
   const fechaId = searchParams.get("fecha");
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [datos, setDatos] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -120,7 +122,16 @@ export default function SeleccionAsientos() {
           <img src={logo} alt="Tessera" className="home-logo-img" />
           Tessera
         </Link>
-        <Link to="/perfil" className="home-login-btn">
+        <Link
+          to={
+            user?.rol === "ROLE_EMPRESA"
+              ? "/empresa/dashboard"
+              : user?.rol === "ROLE_ADMIN"
+              ? "/admin/dashboard"
+              : "/perfil"
+          }
+          className="home-login-btn"
+        >
           <i className="ti ti-user"></i>
           Usuario
         </Link>

@@ -1,22 +1,28 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Login from './login/Login';
-import RegistroCliente from './registro/RegistroCliente';
-import RegistroEmpresa from './registro/RegistroEmpresa';
+
+// Home se queda con import estático porque es la primera pantalla que ve todo mundo
 import Home from './cliente/Home';
-import Carrito from './cliente/Carrito';
-import SeleccionAsientos from './cliente/SeleccionAsientos';
-import Confirmacion from './cliente/Confirmacion';
-import MisBoletos from './cliente/MisBoletos';
-import Perfil from './cliente/Perfil';
-import DashboardEmpresa from './empresa/Dashboard';
-import CrearEditarEvento from './empresa/CrearEditarEvento';
-import GestionRecintos from './administrador/GestionRecintos';
-import DashboardAdmin from './administrador/DashboardAdmin';
+
+// El resto se carga solo cuando el usuario navega a esa ruta.
+const Login = lazy(() => import('./login/Login'));
+const RegistroCliente = lazy(() => import('./registro/RegistroCliente'));
+const RegistroEmpresa = lazy(() => import('./registro/RegistroEmpresa'));
+const Carrito = lazy(() => import('./cliente/Carrito'));
+const SeleccionAsientos = lazy(() => import('./cliente/SeleccionAsientos'));
+const Confirmacion = lazy(() => import('./cliente/Confirmacion'));
+const MisBoletos = lazy(() => import('./cliente/MisBoletos'));
+const Perfil = lazy(() => import('./cliente/Perfil'));
+const DashboardEmpresa = lazy(() => import('./empresa/Dashboard'));
+const CrearEditarEvento = lazy(() => import('./empresa/CrearEditarEvento'));
+const GestionRecintos = lazy(() => import('./administrador/GestionRecintos'));
+const DashboardAdmin = lazy(() => import('./administrador/DashboardAdmin'));
 
 function App() {
   return (
     <>
       <div className="main-content">
+        <Suspense fallback={<p style={{ padding: 24 }}>Cargando...</p>}>
         <Routes>
           {/* pag publicas */}
           <Route path="/" element={<Home />} />
@@ -41,6 +47,7 @@ function App() {
           {/* pag administrador */}
           <Route path="/admin/dashboard" element={<DashboardAdmin />} />
         </Routes>
+        </Suspense>
       </div>
     </>
   );

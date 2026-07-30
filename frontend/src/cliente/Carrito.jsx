@@ -4,6 +4,7 @@ import logo from "../assets/img/logo.png";
 import ticketThumb from "../assets/img/modalejemplo.png";
 import { procesarPago, liberarReserva } from "../services/cartService";
 import { resolverUrlImagen } from "../services/api";
+import { useAuth } from "../AuthContext";
 import "./Carrito.css";
 
 const CARGO_SERVICIO = 100.0;
@@ -11,6 +12,7 @@ const CARGO_SERVICIO = 100.0;
 export default function Carrito() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
 
   const datosEvento = location.state || null;
   const [items, setItems] = useState(datosEvento?.items || []);
@@ -98,7 +100,16 @@ export default function Carrito() {
           <img src={logo} alt="Tessera" className="home-logo-img" />
           Tessera
         </Link>
-        <Link to="/perfil" className="home-login-btn">
+        <Link
+          to={
+            user?.rol === "ROLE_EMPRESA"
+              ? "/empresa/dashboard"
+              : user?.rol === "ROLE_ADMIN"
+              ? "/admin/dashboard"
+              : "/perfil"
+          }
+          className="home-login-btn"
+        >
           <i className="ti ti-user"></i>
           Usuario
         </Link>
