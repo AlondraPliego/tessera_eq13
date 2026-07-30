@@ -3,25 +3,35 @@ package com.TESSERA.Eq13Tessera.notificaciones.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class MailService {
 
     private static final Logger log = LoggerFactory.getLogger(MailService.class);
+    private static final String SENDGRID_URL = "https://api.sendgrid.com/v3/mail/send";
 
-    private final JavaMailSender mailSender;
+    private final RestTemplate restTemplate;
 
     @Value("${mail.remitente}")
     private String remitente;
 
-    public MailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+
+    @Value("${sendgrid.api.key}")
+    private String sendgridApiKey;
+
+    public MailService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     @Async
@@ -53,15 +63,34 @@ public class MailService {
         enviar(destinatario, asunto, cuerpo);
     }
 
-    // Método genérico: arma el correo y lo manda con JavaMailSender
+    // Arma el JSON que pide la API de SendGrid y lo manda por HTTPS
     private void enviar(String destinatario, String asunto, String cuerpo) {
         try {
-            SimpleMailMessage mensaje = new SimpleMailMessage();
-            mensaje.setFrom(remitente);
-            mensaje.setTo(destinatario);
-            mensaje.setSubject(asunto);
-            mensaje.setText(cuerpo);
-            mailSender.send(mensaje);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(sendgridApiKey);
+
+            Map<String, Object> to = new HashMap<>();
+            to.put("email", destinatario);
+
+            Map<String, Object> personalization = new HashMap<>();
+            personalization.put("to", List.of(to));
+
+            Map<String, Object> from = new HashMap<>();
+            from.put("email", remitente);
+
+            Map<String, Object> content = new HashMap<>();
+            content.put("type", "text/plain");
+            content.put("value", cuerpo);
+
+            Map<String, Object> body = new HashMap<>();
+            body.put("personalizations", List.of(personalization));
+            body.put("from", from);
+            body.put("subject", asunto);
+            body.put("content", List.of(content));
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            restTemplate.postForEntity(SENDGRID_URL, request, String.class);
             log.info("Correo enviado a {}", destinatario);
         } catch (Exception e) {
             // No tumbamos la petición del usuario solo porque el correo falló
